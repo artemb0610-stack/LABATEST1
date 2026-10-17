@@ -40,38 +40,38 @@ this.KB.DEFAULT_CONFIG = {
     },
     "same-digits": {
       "pattern": "glow",
-      "color": "#7b5cff",
-      "accent": "#ff5cc8"
+      "color": "#4b4fb8",
+      "accent": "#8fb4f2"
     },
     "counting": {
       "pattern": "blocks",
       "color": "#1f2329",
-      "accent": "#fff3d6",
+      "accent": "#f4f6f9",
       "palette": [
-        "#ff6b6b",
-        "#ffa94d",
-        "#40c057",
-        "#4dabf7",
-        "#9775fa",
-        "#f06595"
+        "#e8655f",
+        "#e8933a",
+        "#3faa62",
+        "#3f8fd8",
+        "#8a6fd6",
+        "#d0588f"
       ]
     },
     "mirror": {
       "pattern": "mirror",
-      "color": "#13808f",
-      "accent": "#e3f6f8",
+      "color": "#2f6f86",
+      "accent": "#f1f7f9",
       "palette": [
-        "#13808f",
-        "#e8590c",
-        "#7048e8",
-        "#2f9e44",
-        "#c2255c"
+        "#2f6f86",
+        "#c46a3c",
+        "#6f5bc4",
+        "#3f8f5f",
+        "#b0507a"
       ]
     },
     "round": {
       "pattern": "bold",
-      "color": "#1e8e3e",
-      "accent": "#d9f5df"
+      "color": "#2bb24c",
+      "accent": "#eef9ec"
     }
   },
   "rules": [
