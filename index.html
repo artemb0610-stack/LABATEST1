@@ -40,7 +40,14 @@
       <div class="kidcard__art"><i></i><i></i><i></i><i></i><i></i></div>
     </div>
     <article class="card balance">
-      <div class="sum sum--xl" id="homeBalance"></div>
+      <div class="balance__main">
+        <div class="balance__label">Мой счёт</div>
+        <div class="sum sum--xl" id="homeBalance"></div>
+      </div>
+      <button class="balance__chip" data-tab="piggies" aria-label="Перейти в копилки">
+        <span class="balance__chip-l">в копилках</span>
+        <span class="balance__chip-v"><span id="homeSaved"></span><svg><use href="#i-piggy"/></svg></span>
+      </button>
       <div class="balance__dots"><b></b><i></i><i></i></div>
     </article>
 

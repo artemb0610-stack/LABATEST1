@@ -12,6 +12,7 @@
 
   var state = {
     balance: 3250,
+    balanceKop: 40,
     piggies: [
       { id: 'scooter', name: 'Самокат', pic: '🛴', bg: '#fff3e0', amount: 980, goal: 5000, demo: true,
         history: [
@@ -146,8 +147,28 @@
 
   /* ================= главный ================= */
 
+  // Баланс с копейками (серым, как в макетах). При первом показе — короткий «досчёт» от нуля.
+  var balanceShown = false;
+  function balanceHTML(rub) {
+    var s = String(rub).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    var kop = (state.balanceKop < 10 ? '0' : '') + state.balanceKop;
+    return s + '<span class="kop">,' + kop + '</span> <span class="rub">₽</span>';
+  }
+  function renderBalance() {
+    var el = $('homeBalance');
+    if (balanceShown || !window.requestAnimationFrame) { el.innerHTML = balanceHTML(state.balance); return; }
+    balanceShown = true;
+    var to = state.balance, t0 = performance.now(), dur = 700;
+    (function step(now) {
+      var k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      el.innerHTML = balanceHTML(Math.round(to * e));
+      if (k < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+
   function renderHome() {
-    $('homeBalance').innerHTML = sumHTML(state.balance);
+    renderBalance();
+    $('homeSaved').textContent = E.formatRub(state.piggies.reduce(function (a, p) { return a + p.amount; }, 0));
     $('homeHistory').innerHTML = state.homeHistory.map(function (h) {
       return '<li><span class="list__ic list__ic--' + h.tone + '"><svg><use href="#i-' + h.ic + '"/></svg></span>' +
         '<span class="list__txt"><div class="list__title">' + h.title + '</div><div class="list__sub">' + h.sub + '</div></span>' +
