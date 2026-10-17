@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#f3f5f7">
+  <title>Копилка: красивые числа</title>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- ========== ГЛАВНАЯ (прикол разрешён, но эффекты только на копилке) ========== -->
+  <section class="screen is-active" data-screen="home" data-overlay="allowed" aria-label="Главная">
+    <header class="top">
+      <div class="avatar" aria-hidden="true">М</div>
+      <div class="top__text">
+        <div class="top__hello">Привет, Маша!</div>
+        <div class="top__sub">Хороший день, чтобы копить</div>
+      </div>
+    </header>
+
+    <article class="card card--account">
+      <div class="card__label">Мой счёт</div>
+      <div class="card__sum" id="homeBalance">1 250 ₽</div>
+      <div class="actions">
+        <button class="pill" data-go="pay">Оплатить</button>
+        <button class="pill" data-go="pay">Перевести</button>
+      </div>
+    </article>
+
+    <article class="card card--piggy" data-go="piggy" role="button" tabindex="0">
+      <div class="card__row">
+        <div class="piggy-icon" aria-hidden="true">🛴</div>
+        <div class="card__col">
+          <div class="card__label">Копилка «Самокат»</div>
+          <div class="card__sum card__sum--sm"><span id="homePiggy">980 ₽</span> <span class="muted" id="homeGoal">из 5 000 ₽</span></div>
+        </div>
+        <span class="spark" id="homeSpark" hidden>✨</span>
+        <span class="chev" aria-hidden="true">›</span>
+      </div>
+      <div class="bar"><div class="bar__fill" id="homeBar"></div></div>
+    </article>
+
+    <div class="tiles">
+      <div class="tile"><span>📚</span>Курсы</div>
+      <div class="tile"><span>✅</span>Задания</div>
+      <div class="tile"><span>🎮</span>Игры</div>
+      <div class="tile"><span>🎯</span>Цели</div>
+    </div>
+  </section>
+
+  <!-- ========== КОПИЛКА — здесь живёт прикол ========== -->
+  <section class="screen" data-screen="piggy" data-overlay="allowed" aria-label="Копилка">
+    <header class="nav">
+      <button class="nav__back" data-back aria-label="Назад">‹</button>
+      <div class="nav__title">Копилка</div>
+      <button class="nav__icon" id="soundBtn" aria-label="Звук выключен" title="Звук">🔇</button>
+    </header>
+
+    <div class="goal">
+      <div class="goal__pic" aria-hidden="true">🛴</div>
+      <div class="goal__name">Самокат</div>
+    </div>
+
+    <div class="amount-wrap" id="amountWrap">
+      <button class="amount" id="amount" aria-live="polite" aria-label="Сумма в копилке"></button>
+      <div class="tap-hint" id="tapHint" hidden></div>
+    </div>
+    <div class="soft-hint" id="softHint" hidden></div>
+
+    <div class="progress">
+      <div class="bar bar--big"><div class="bar__fill" id="piggyBar"></div>
+        <i style="left:25%"></i><i style="left:50%"></i><i style="left:75%"></i>
+      </div>
+      <div class="progress__meta"><span id="piggyPct">20%</span><span id="piggyGoal">цель 5 000 ₽</span></div>
+    </div>
+
+    <button class="btn btn--primary" data-go="topup">Пополнить копилку</button>
+
+    <h3 class="h3">История</h3>
+    <ul class="history" id="history"></ul>
+  </section>
+
+  <!-- ========== ПЕРЕВОД В КОПИЛКУ — экран перевода, прикол запрещён ========== -->
+  <section class="screen" data-screen="topup" data-overlay="forbidden" aria-label="Пополнение копилки">
+    <header class="nav">
+      <button class="nav__back" data-back aria-label="Назад">‹</button>
+      <div class="nav__title">Пополнить копилку</div>
+      <span class="nav__icon"></span>
+    </header>
+    <div class="form">
+      <div class="from">Со счёта: <b id="topupBalance">1 250 ₽</b></div>
+      <label class="field">
+        <span>Сколько отложить</span>
+        <input id="topupInput" inputmode="numeric" pattern="[0-9]*" placeholder="0 ₽" autocomplete="off">
+      </label>
+      <div class="chips" id="chips">
+        <button data-add="10">10 ₽</button><button data-add="20">20 ₽</button>
+        <button data-add="50">50 ₽</button><button data-add="100">100 ₽</button>
+        <button data-add="200">200 ₽</button><button data-add="500">500 ₽</button>
+      </div>
+      <div class="error" id="topupError" hidden></div>
+    </div>
+    <button class="btn btn--primary" id="topupGo">Отложить в копилку</button>
+  </section>
+
+  <!-- ========== ОПЛАТА — критичный экран, прикол запрещён ========== -->
+  <section class="screen" data-screen="pay" data-overlay="forbidden" aria-label="Оплата">
+    <header class="nav">
+      <button class="nav__back" data-back aria-label="Назад">‹</button>
+      <div class="nav__title">Оплата и переводы</div>
+      <span class="nav__icon"></span>
+    </header>
+    <div class="stub">
+      <div class="stub__icon">🔒</div>
+      <p>Это заглушка экрана оплаты из основного приложения.</p>
+      <p class="muted">Здесь слой эффектов отключён полностью: на экранах оплаты, перевода, реквизитов и лимитов прикол не появляется.</p>
+    </div>
+  </section>
+
+  <!-- ========== СЛОЙ ЭФФЕКТОВ: поверх всего, не перехватывает касания ========== -->
+  <div class="fx" id="fx" aria-hidden="true">
+    <canvas id="fxCanvas"></canvas>
+    <div class="toasts" id="toasts"></div>
+  </div>
+
+  <!-- ========== ДЕМО-ПАНЕЛЬ ДЛЯ ЗАЩИТЫ (в приложение не входит) ========== -->
+  <button class="demo-fab" id="demoFab" aria-label="Демо-панель">⚙︎</button>
+  <aside class="demo" id="demo" hidden>
+    <div class="demo__head">
+      <b>Демо для жюри</b>
+      <button class="demo__close" id="demoClose" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="demo__sec">
+      <div class="demo__label">Сумма в копилке</div>
+      <div class="demo__presets" id="presets">
+        <button data-set="995">995</button><button data-set="1000">1 000</button>
+        <button data-set="1230">1 230</button><button data-set="1234">1 234</button>
+        <button data-set="7777">7 777</button><button data-set="12321">12 321</button>
+        <button data-set="4990">4 990</button><button data-set="2020">2 020</button>
+      </div>
+      <div class="demo__row">
+        <input id="demoAmount" inputmode="numeric" placeholder="своя сумма">
+        <button id="demoSet">Поставить</button>
+      </div>
+    </div>
+    <div class="demo__sec">
+      <div class="demo__label">Конфиг (JSON по ключу CMS)</div>
+      <div class="demo__row demo__row--wrap">
+        <label><input type="checkbox" id="demoHint" checked> подсказка «до красивого числа»</label>
+        <label>сезон
+          <select id="demoSeason">
+            <option value="auto">по дате</option>
+            <option value="autumn">осень</option>
+            <option value="winter">зима</option>
+            <option value="none">без сезона</option>
+          </select>
+        </label>
+      </div>
+      <textarea id="demoJson" spellcheck="false" rows="9"></textarea>
+      <div class="demo__row">
+        <button id="demoApply">Применить без релиза</button>
+        <button id="demoBreak" class="ghost">Сломать конфиг</button>
+        <button id="demoReset" class="ghost">Сброс</button>
+      </div>
+      <div class="demo__warn" id="demoWarn"></div>
+    </div>
+  </aside>
+</div>
+
+<script src="js/engine.js"></script>
+<script src="js/default-config.js"></script>
+<script src="js/overlay.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "enabled": true,
+  "maxEffectMs": 1800,
+  "autoMode": "hint",
+  "autoOnTopup": "full",
+  "tapHint": "Нажми на цифры ✨",
+  "hint": {
+    "enabled": true,
+    "maxGap": 100,
+    "text": "До красивого числа {next} осталось {gap} ₽"
+  },
+  "styles": {
+    "banknote-100":  { "pattern": "guilloche", "color": "#7a4a22", "accent": "#e2c49a" },
+    "banknote-500":  { "pattern": "guilloche", "color": "#5b3a8c", "accent": "#cdb8ea" },
+    "banknote-1000": { "pattern": "guilloche", "color": "#0f6b6b", "accent": "#9fdcd2" },
+    "banknote-2000": { "pattern": "guilloche", "color": "#1d4f96", "accent": "#a9c6ef" },
+    "banknote-5000": { "pattern": "guilloche", "color": "#a3361f", "accent": "#f3b79a" },
+    "same-digits":   { "pattern": "glow",      "color": "#7b5cff", "accent": "#ff5cc8" },
+    "counting":      { "pattern": "blocks",    "color": "#1f2329", "accent": "#fff3d6",
+                       "palette": ["#ff6b6b", "#ffa94d", "#40c057", "#4dabf7", "#9775fa", "#f06595"] },
+    "mirror":        { "pattern": "mirror",    "color": "#13808f", "accent": "#e3f6f8",
+                       "palette": ["#13808f", "#e8590c", "#7048e8", "#2f9e44", "#c2255c"] },
+    "round":         { "pattern": "bold",      "color": "#1e8e3e", "accent": "#d9f5df" }
+  },
+  "rules": [
+    { "id": "bn-5000", "type": "exact", "values": [5000], "style": "banknote-5000", "hintable": true,
+      "badge": "Как купюра в 5 000 ₽!", "effects": ["coins", "confetti"] },
+    { "id": "bn-2000", "type": "exact", "values": [2000], "style": "banknote-2000", "hintable": true,
+      "badge": "Как купюра в 2 000 ₽!", "effects": ["coins", "confetti"] },
+    { "id": "bn-1000", "type": "exact", "values": [1000], "style": "banknote-1000", "hintable": true,
+      "badge": "Как купюра в 1 000 ₽!", "effects": ["coins", "confetti"] },
+    { "id": "bn-500", "type": "exact", "values": [500], "style": "banknote-500", "hintable": true,
+      "badge": "Как купюра в 500 ₽!", "effects": ["coins", "sparkles"] },
+    { "id": "bn-100", "type": "exact", "values": [100], "style": "banknote-100", "hintable": true,
+      "badge": "Как купюра в 100 ₽!", "effects": ["coins", "sparkles"] },
+    { "id": "same", "type": "repdigit", "minLength": 3, "style": "same-digits", "hintable": true,
+      "badge": "Все цифры одинаковые!", "effects": ["sparkles", "confetti"] },
+    { "id": "stairs", "type": "sequence", "minLength": 3, "style": "counting", "hintable": true,
+      "badge": "Цифры по порядку — как при счёте!", "effects": ["confetti", "sparkles"] },
+    { "id": "mirror", "type": "palindrome", "minLength": 3, "style": "mirror", "hintable": false,
+      "badge": "Число-зеркало: читается с двух сторон!", "effects": ["sparkles"] },
+    { "id": "pairs", "type": "regex", "pattern": "^(\\d\\d)\\1+$", "style": "same-digits", "hintable": false,
+      "badge": "Повторяющиеся пары цифр!", "effects": ["sparkles"] },
+    { "id": "round", "type": "round", "minLength": 3, "minZeros": 2, "style": "round", "hintable": true,
+      "badge": "Круглое число!", "effects": ["coins", "confetti"] }
+  ],
+  "milestones": {
+    "enabled": true,
+    "percents": [25, 50, 75, 100],
+    "effects": ["confetti"],
+    "texts": {
+      "25": "Четверть пути к цели пройдена!",
+      "50": "Половина пути! Так держать",
+      "75": "Осталось совсем чуть-чуть",
+      "100": "Цель накоплена: {goal}! 🎉"
+    }
+  },
+  "topup": { "enabled": true, "effect": "coinDrop" },
+  "seasons": [
+    { "id": "autumn", "title": "Осень", "from": "09-01", "to": "11-30", "particles": "leaves", "badgePrefix": "🍂" },
+    { "id": "winter", "title": "Зима",  "from": "12-01", "to": "02-28", "particles": "snow",   "badgePrefix": "❄️" }
+  ]
+}
