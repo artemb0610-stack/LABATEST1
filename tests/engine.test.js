@@ -112,6 +112,16 @@ t('отдельное правило можно выключить, своё ч�
   assert.strictEqual(E.classify(2026, c).rule.id, 'custom-2026');
 });
 
+t('оформления цифр из конфига', function () {
+  assert.strictEqual(cfg.themes[0].id, 'auto');
+  assert.ok(cfg.themes.some(function (t) { return t.id === 'strict' && t.style === 'strict'; }));
+  var c2 = JSON.parse(JSON.stringify(raw));
+  c2.themes = [{ id: 'x', title: 'Битое', style: 'нет-такого' }, { title: 'без id' }];
+  var c = E.sanitize(c2);
+  assert.strictEqual(c.warnings.length, 2);
+  assert.deepStrictEqual(c.themes.map(function (t) { return t.id; }), ['auto']); // «Авто» есть всегда
+});
+
 t('выключатель enabled', function () {
   var c = E.sanitize(Object.assign({}, raw, { enabled: false }));
   assert.strictEqual(E.classify(1000, c), null);

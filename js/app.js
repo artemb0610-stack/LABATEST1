@@ -100,6 +100,7 @@
   }
 
   function onEnter(name, info) {
+    if (!$('styleSheet').hidden) closeStyleSheet();
     if (isForbidden()) FX.cancel();            // на оплату/перевод — слой гаснет мгновенно
     if (name === 'piggy') enterPiggy(info);
     if (name === 'topup') enterTopup();
@@ -230,34 +231,42 @@
     if (opts.auto && hit) autoShow(hit, state.cfg.autoMode);
   }
 
-  function renderAmount(value, hit) {
-    var text = E.formatRub(value);
+  /* ----- оформление цифр, выбранное ребёнком (хранится только на устройстве) ----- */
+
+  var THEME_KEY = 'kb.digits.theme';
+  state.theme = 'auto';
+  try { state.theme = localStorage.getItem(THEME_KEY) || 'auto'; } catch (e) { /* хранилище недоступно */ }
+
+  function themeById(id) {
+    var list = state.cfg.themes || [];
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+    return null;
+  }
+  // Стиль суммы: выбранное оформление, а в «Авто» — стиль красивого числа (или обычные цифры)
+  function styleFor(hit) {
+    var t = state.cfg.enabled ? themeById(state.theme) : null;
+    if (t && t.style && state.cfg.styles[t.style]) return state.cfg.styles[t.style];
+    return hit ? hit.style : null;
+  }
+
+  // Рисует сумму в элемент: каждая цифра — отдельный span, стиль — через data-pattern и CSS-переменные.
+  function paintAmount(el, value, st) {
     var html = '';
-    var digitIndex = 0;
     var s = String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
     for (var i = 0; i < s.length; i++) {
       if (s[i] === ' ') { html += '<span class="sp"></span>'; continue; }
-      html += '<span class="d' + (s[i] === '0' ? ' zero' : '') + '" data-i="' + digitIndex + '">' + s[i] + '</span>';
-      digitIndex++;
+      html += '<span class="d' + (s[i] === '0' ? ' zero' : '') + '">' + s[i] + '</span>';
     }
     html += '<span class="cur">₽</span>';
-    amountEl.innerHTML = html;
-    amountEl.setAttribute('data-text', text);
-    amountEl.setAttribute('aria-label', 'В копилке ' + text);
-    amountEl.classList.remove('is-shine', 'is-pop');
-    $('tapHint').hidden = true;
+    el.innerHTML = html;
+    el.setAttribute('data-text', E.formatRub(value));
 
-    if (!hit) {
-      amountEl.removeAttribute('data-pattern');
-      amountEl.removeAttribute('style');
-      return;
-    }
-    var st = hit.style;
-    amountEl.setAttribute('data-pattern', st.pattern);
-    amountEl.style.setProperty('--c', st.color || '#1f2329');
-    amountEl.style.setProperty('--a', st.accent || '#fff3d6');
+    if (!st) { el.removeAttribute('data-pattern'); el.removeAttribute('style'); return; }
+    el.setAttribute('data-pattern', st.pattern);
+    el.style.setProperty('--c', st.color || '#1f2329');
+    el.style.setProperty('--a', st.accent || '#fff3d6');
 
-    var ds = amountEl.querySelectorAll('.d');
+    var ds = el.querySelectorAll('.d');
     var pal = st.palette && st.palette.length ? st.palette : [st.color || '#4dabf7'];
     for (var j = 0; j < ds.length; j++) {
       ds[j].style.setProperty('--delay', (j * 0.12) + 's');
@@ -273,11 +282,57 @@
     if (st.pattern === 'mirror' && ds.length) {
       var line = document.createElement('span');
       line.className = 'mirror-line';
-      amountEl.appendChild(line);
+      el.appendChild(line);
       var first = ds[0], last = ds[ds.length - 1];
       line.style.left = ((first.offsetLeft + last.offsetLeft + last.offsetWidth) / 2 - 1) + 'px';
     }
   }
+
+  function renderAmount(value, hit) {
+    paintAmount(amountEl, value, styleFor(hit));
+    amountEl.setAttribute('aria-label', 'В копилке ' + E.formatRub(value));
+    amountEl.classList.remove('is-shine', 'is-pop');
+    $('tapHint').hidden = true;
+  }
+
+  /* ----- шторка выбора оформления ----- */
+
+  function openStyleSheet() {
+    var sheet = $('styleSheet');
+    sheet.hidden = false;
+    var value = P().amount;
+    var list = $('themeList');
+    list.innerHTML = (state.cfg.themes || []).map(function (t) {
+      return '<button class="theme' + (t.id === 'auto' ? ' theme--auto' : '') + (t.id === state.theme ? ' is-on' : '') + '" data-theme="' + t.id + '">' +
+        '<span class="theme__prev">' + (t.id === 'auto' ? '✨ Сюрприз' : '<span class="amount amount--sm"></span>') + '</span>' +
+        '<span class="theme__name">' + t.title + '<span class="theme__check">✓</span></span>' +
+        '<span class="theme__desc">' + (t.desc || '') + '</span></button>';
+    }).join('');
+    // превью рисуем на сумме самого ребёнка — уже после того, как шторка видна
+    Array.prototype.forEach.call(list.querySelectorAll('[data-theme]'), function (b) {
+      var t = themeById(b.getAttribute('data-theme'));
+      var prev = b.querySelector('.amount--sm');
+      if (prev && t) paintAmount(prev, value, state.cfg.styles[t.style]);
+    });
+  }
+  function closeStyleSheet() { $('styleSheet').hidden = true; }
+
+  $('styleBtn').addEventListener('click', function () {
+    if (!state.cfg.enabled || !(state.cfg.themes || []).length) { FX.haptic(10); return; }
+    openStyleSheet();
+  });
+  $('styleSheet').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-theme]');
+    if (b) {
+      state.theme = b.getAttribute('data-theme');
+      try { localStorage.setItem(THEME_KEY, state.theme); } catch (err) { /* не сохранилось — ок, работает до закрытия */ }
+      Array.prototype.forEach.call($('themeList').children, function (c) { c.classList.toggle('is-on', c === b); });
+      FX.haptic(12);
+      renderPiggy({ auto: false });
+      return;
+    }
+    if (e.target.closest('[data-close-sheet]')) closeStyleSheet();
+  });
 
   function renderProgress(value) {
     var goal = P().goal;
@@ -315,8 +370,9 @@
     var th = $('tapHint');
     if (state.cfg.tapHint) {
       th.textContent = state.cfg.tapHint;
-      th.style.setProperty('--hint-ink', hit.style.color || '');
-      th.style.setProperty('--hint-bg', hit.style.accent || '');
+      var hs = styleFor(hit);
+      th.style.setProperty('--hint-ink', hs.color || '');
+      th.style.setProperty('--hint-bg', hs.accent || '');
       th.hidden = false;
     }
   }
@@ -346,7 +402,7 @@
     var kinds = [rule.effects[(Math.random() * rule.effects.length) | 0]];
     var s = season();
     if (s && s.particles) kinds.push(s.particles);
-    FX.play(kinds, originOfAmount(), paletteOf(hit.style), cfg.maxEffectMs);
+    FX.play(kinds, originOfAmount(), paletteOf(styleFor(hit)), cfg.maxEffectMs);
     FX.toast((s && s.badgePrefix ? s.badgePrefix + ' ' : '') + rule.badge);
     FX.haptic([15, 40, 25]);
     FX.chime('pretty');

@@ -12,7 +12,55 @@ this.KB.DEFAULT_CONFIG = {
     "maxGap": 100,
     "text": "До красивого числа {next} осталось {gap} ₽"
   },
+  "themes": [
+    {
+      "id": "auto",
+      "title": "Авто",
+      "desc": "Своё оформление для каждого красивого числа"
+    },
+    {
+      "id": "strict",
+      "title": "Строгий",
+      "style": "strict",
+      "desc": "Чёрные цифры, без украшений"
+    },
+    {
+      "id": "banknote",
+      "title": "Купюра",
+      "style": "banknote-1000",
+      "desc": "Как на денежной купюре"
+    },
+    {
+      "id": "cubes",
+      "title": "Кубики",
+      "style": "counting",
+      "desc": "Цифры как кубики для счёта"
+    },
+    {
+      "id": "shimmer",
+      "title": "Переливы",
+      "style": "same-digits",
+      "desc": "Мягкий перелив цвета"
+    },
+    {
+      "id": "mirror",
+      "title": "Зеркало",
+      "style": "mirror",
+      "desc": "Цветные пары цифр"
+    },
+    {
+      "id": "green",
+      "title": "Зелёный",
+      "style": "round",
+      "desc": "В цветах приложения"
+    }
+  ],
   "styles": {
+    "strict": {
+      "pattern": "strict",
+      "color": "#0d0d0d",
+      "accent": "#e8ebef"
+    },
     "banknote-100": {
       "pattern": "guilloche",
       "color": "#7a4a22",

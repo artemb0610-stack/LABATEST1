@@ -30,6 +30,7 @@
     <symbol id="i-sound-off" viewBox="0 0 24 24"><path d="M4 9h3.5L12 5v14l-4.5-4H4z" fill="currentColor"/><path d="m16 9.5 5 5m0-5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
     <symbol id="i-sound-on" viewBox="0 0 24 24"><path d="M4 9h3.5L12 5v14l-4.5-4H4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></symbol>
     <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2.5l2 11h10.5l2-8H7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="19" r="1.6" fill="currentColor"/><circle cx="17" cy="19" r="1.6" fill="currentColor"/></symbol>
+    <symbol id="i-brush" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c1.2 0 2-.8 2-1.8 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-1 .8-1.8 1.8-1.8H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3Z" fill="currentColor"/><circle cx="7.5" cy="11" r="1.4" fill="#fff"/><circle cx="10.5" cy="7.3" r="1.4" fill="#fff"/><circle cx="15" cy="7.8" r="1.4" fill="#fff"/></symbol>
     <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3.5" y="9" width="17" height="11.5" rx="2" fill="currentColor"/><rect x="2.5" y="6.5" width="19" height="4" rx="1.5" fill="currentColor"/><path d="M12 6.5v14" stroke="#fff" stroke-width="2"/></symbol>
   </svg>
 
@@ -104,6 +105,7 @@
     </header>
 
     <article class="card hero">
+      <button class="hero__style" id="styleBtn" aria-label="Оформление цифр"><svg><use href="#i-brush"/></svg><span>Цифры</span></button>
       <div class="hero__pic" id="piggyPic" aria-hidden="true">🛴</div>
 
       <div class="amount-wrap" id="amountWrap">
@@ -174,6 +176,18 @@
     <button class="tab" data-go="pay"><svg><use href="#i-check"/></svg><span>Дела</span></button>
     <button class="tab" data-go="pay"><svg><use href="#i-spark"/></svg><span>Контент</span></button>
   </nav>
+
+  <!-- ========== ШТОРКА «ОФОРМЛЕНИЕ ЦИФР» — выбор ребёнка, хранится на устройстве ========== -->
+  <div class="sheet" id="styleSheet" hidden>
+    <div class="sheet__backdrop" data-close-sheet></div>
+    <div class="sheet__panel" role="dialog" aria-label="Оформление цифр">
+      <div class="sheet__grip"></div>
+      <div class="sheet__title">Оформление цифр</div>
+      <div class="sheet__sub">Выбери, как будет выглядеть сумма в копилке</div>
+      <div class="themes" id="themeList"></div>
+      <button class="btn btn--grad" data-close-sheet>Готово</button>
+    </div>
+  </div>
 
   <!-- ========== СЛОЙ ЭФФЕКТОВ: поверх всего, не перехватывает касания ========== -->
   <div class="fx" id="fx" aria-hidden="true">

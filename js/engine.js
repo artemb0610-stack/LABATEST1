@@ -129,7 +129,7 @@
    */
   function sanitize(raw) {
     var warnings = [];
-    var OFF = { enabled: false, rules: [], styles: {}, seasons: [], warnings: warnings };
+    var OFF = { enabled: false, rules: [], styles: {}, seasons: [], themes: [], warnings: warnings };
     if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
       warnings.push('Конфиг пустой или не объект — эффекты выключены');
       return OFF;
@@ -202,6 +202,15 @@
         texts: raw.milestones.texts && typeof raw.milestones.texts === 'object' ? raw.milestones.texts : {}
       };
     }
+
+    // Оформления цифр на выбор ребёнку. «auto» — без своего стиля: у каждого красивого числа свой.
+    cfg.themes = [];
+    (Array.isArray(raw.themes) ? raw.themes : []).forEach(function (t) {
+      if (!t || typeof t.id !== 'string' || typeof t.title !== 'string') { warnings.push('Оформление пропущено: нет id или title'); return; }
+      if (t.id !== 'auto' && !cfg.styles[t.style]) { warnings.push('Оформление «' + t.title + '»: нет стиля «' + t.style + '»'); return; }
+      cfg.themes.push({ id: t.id, title: t.title, style: t.id === 'auto' ? null : t.style, desc: typeof t.desc === 'string' ? t.desc : '' });
+    });
+    if (!cfg.themes.some(function (t) { return t.id === 'auto'; })) cfg.themes.unshift({ id: 'auto', title: 'Авто', style: null, desc: '' });
 
     (Array.isArray(raw.seasons) ? raw.seasons : []).forEach(function (s) {
       if (s && /^\d\d-\d\d$/.test(s.from) && /^\d\d-\d\d$/.test(s.to)) cfg.seasons.push(s);
