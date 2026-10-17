@@ -91,7 +91,8 @@ tools/build-default.js   пересборка default-config.js
 ```
 
 ```bash
-node tests/engine.test.js        # тесты
+node tests/engine.test.js        # тесты движка (18)
+python3 tests/e2e.py             # сквозные тесты в браузере: ~200 проверок (нужен запущенный http.server 8765 и playwright)
 node tools/build-default.js      # после правки config/effects.json
 ```
 

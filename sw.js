@@ -7,7 +7,7 @@
  * В нативном приложении это делает кэш CMS-ключа и ресурсы внутри сборки.
  * При изменении файлов оболочки поднимаем VERSION, чтобы телефон забрал новую версию.
  */
-var VERSION = 'kopilka-v5';
+var VERSION = 'kopilka-v6';
 var SHELL = [
   './',
   'index.html',
@@ -24,7 +24,7 @@ var SHELL = [
 ];
 
 self.addEventListener('install', function (e) {
-  e.waitUntil(caches.open(VERSION).then(function (c) { return c.addAll(SHELL); }).then(function () { return self.skipWaiting(); }));
+  e.waitUntil(caches.open(VERSION).then(function (c) { return c.addAll(SHELL.map(function (u) { return new Request(u, { cache: 'reload' }); })); }).then(function () { return self.skipWaiting(); }));
 });
 
 self.addEventListener('activate', function (e) {

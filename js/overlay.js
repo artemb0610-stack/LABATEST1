@@ -176,16 +176,20 @@
 
   /* ---------- плашки ---------- */
 
-  var toastQueue = [], toastBusy = false;
+  var toastQueue = [], toastBusy = false, lastToastText = '';
   function toast(text, ms) {
     if (!text || isForbidden()) return;
+    // частые тапы не копят очередь плашек: одинаковые не дублируем, в очереди не больше двух
+    if (lastToastText === text && toastBusy) return;
+    if (toastQueue.some(function (q) { return q.text === text; }) || toastQueue.length >= 2) return;
     toastQueue.push({ text: text, ms: ms || 1700 });
     if (!toastBusy) nextToast();
   }
   function nextToast() {
     var item = toastQueue.shift();
-    if (!item || isForbidden()) { toastBusy = false; toastQueue.length = 0; return; }
+    if (!item || isForbidden()) { toastBusy = false; lastToastText = ''; toastQueue.length = 0; return; }
     toastBusy = true;
+    lastToastText = item.text;
     var el = document.createElement('div');
     el.className = 'toast'; el.textContent = item.text;
     toastsEl.appendChild(el);

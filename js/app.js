@@ -60,6 +60,21 @@
     for (var i = 0; i < tabs.length; i++) tabs[i].classList.toggle('is-active', tabs[i].getAttribute('data-tab') === state.stack[0]);
   }
 
+  // Одна «страховочная» запись в истории браузера, пока открыт вложенный экран
+  var historyGuard = false;
+  function ensureGuard() {
+    if (!historyGuard && state.stack.length > 1 && window.history && history.pushState) {
+      try { history.pushState({ kb: 1 }, ''); historyGuard = true; } catch (e) { /* без истории — ок */ }
+    }
+  }
+  window.addEventListener('popstate', function () {
+    historyGuard = false;
+    if (!$('styleSheet').hidden) closeStyleSheet();
+    else if (!$('demo').hidden) $('demo').hidden = true;
+    else if (state.stack.length > 1) back();
+    ensureGuard();
+  });
+
   function go(name) {
     if (current() === name) return;
     var prev = screenEl(current());
@@ -69,6 +84,7 @@
     next.classList.remove('is-behind', 'is-tab'); next.classList.add('is-active');
     next.scrollTop = 0;
     syncChrome();
+    ensureGuard();
     onEnter(name);
   }
 
@@ -260,8 +276,11 @@
     html += '<span class="cur">₽</span>';
     el.innerHTML = html;
     el.setAttribute('data-text', E.formatRub(value));
+    var len = String(value).length;
+    var k = len <= 5 ? 1 : len === 6 ? 0.88 : len === 7 ? 0.78 : len === 8 ? 0.7 : 0.62;
 
-    if (!st) { el.removeAttribute('data-pattern'); el.removeAttribute('style'); return; }
+    if (!st) { el.removeAttribute('data-pattern'); el.removeAttribute('style'); el.style.setProperty('--fs-k', k); return; }
+    el.style.setProperty('--fs-k', k);
     el.setAttribute('data-pattern', st.pattern);
     el.style.setProperty('--c', st.color || '#1f2329');
     el.style.setProperty('--a', st.accent || '#fff3d6');
@@ -449,6 +468,7 @@
   });
 
   $('topupGo').addEventListener('click', function () {
+    if (current() !== 'topup') return; // второй тап во время анимации перехода
     var sum = parseInt($('topupInput').value.replace(/\D/g, ''), 10) || 0;
     var err = $('topupError');
     if (sum <= 0) { err.textContent = 'Введи сумму'; err.hidden = false; return; }
@@ -555,7 +575,7 @@
 
   function setPiggy(v) {
     state.sel = 0;                       // демо-копилка «Самокат»
-    P().amount = Math.max(0, v | 0);
+    P().amount = Math.min(99999999, Math.max(0, v | 0));
     demo.hidden = true;
     if (current() !== 'piggy') { tab('piggies'); go('piggy'); }
     else renderPiggy({ auto: true });
@@ -697,6 +717,10 @@
     el.textContent = text; el.className = 'demo__sec demo__status' + (ok ? ' ok' : '');
   }
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    var hadController = !!navigator.serviceWorker.controller, reloaded = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (hadController && !reloaded) { reloaded = true; location.reload(); }
+    });
     navigator.serviceWorker.register('sw.js').then(function () { return navigator.serviceWorker.ready; })
       .then(function () { setOffline('✓ Офлайн-режим готов: можно выключать интернет', true); })
       .catch(function () { setOffline('Офлайн-режим недоступен в этом браузере'); });
