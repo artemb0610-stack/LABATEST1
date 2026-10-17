@@ -3,121 +3,166 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-  <meta name="theme-color" content="#f3f5f7">
+  <meta name="theme-color" content="#f2f4f7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <title>Копилка: красивые числа</title>
   <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<div class="app" id="app">
+<div class="app is-root" id="app">
 
-  <!-- ========== ГЛАВНАЯ (прикол разрешён, но эффекты только на копилке) ========== -->
-  <section class="screen is-active" data-screen="home" data-overlay="allowed" aria-label="Главная">
+  <!-- Иконки (инлайн, без внешних ресурсов) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 10.2 12 3.6l8.5 6.6V19a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z" fill="currentColor"/><rect x="10" y="13" width="4" height="4" rx="1" fill="#fff"/></symbol>
+    <symbol id="i-piggy" viewBox="0 0 24 24"><path d="M5 12.5C5 8.9 8.4 6.5 12.3 6.5c1.4 0 2.7.3 3.8.8l2.4-1.6-.4 3c.9.8 1.5 1.8 1.7 2.9H21v3h-1.3a5.8 5.8 0 0 1-2.2 2.6V20h-3v-1.6a9 9 0 0 1-3.6 0V20h-3v-2.2C6.2 16.6 5 14.7 5 12.5Z" fill="currentColor"/><circle cx="15.5" cy="11" r="1" fill="#fff"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor"/><path d="m8 12.3 2.7 2.7L16.2 9.5" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2.5c.6 4.8 3.6 8 9.5 9.5-5.9 1.5-8.9 4.7-9.5 9.5-.6-4.8-3.6-8-9.5-9.5 5.9-1.5 8.9-4.7 9.5-9.5Z" fill="currentColor"/></symbol>
+    <symbol id="i-qr" viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 14h2v2h-2zM18 14h2v2h-2zM16 16h2v2h-2zM14 18h2v2h-2zM18 18h2v2h-2z" fill="currentColor"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5" fill="currentColor"/><rect x="10" y="18" width="4" height="1.4" rx=".7" fill="#fff"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-sound-off" viewBox="0 0 24 24"><path d="M4 9h3.5L12 5v14l-4.5-4H4z" fill="currentColor"/><path d="m16 9.5 5 5m0-5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-sound-on" viewBox="0 0 24 24"><path d="M4 9h3.5L12 5v14l-4.5-4H4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2.5l2 11h10.5l2-8H7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="19" r="1.6" fill="currentColor"/><circle cx="17" cy="19" r="1.6" fill="currentColor"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3.5" y="9" width="17" height="11.5" rx="2" fill="currentColor"/><rect x="2.5" y="6.5" width="19" height="4" rx="1.5" fill="currentColor"/><path d="M12 6.5v14" stroke="#fff" stroke-width="2"/></symbol>
+  </svg>
+
+  <!-- ========== ГЛАВНЫЙ ========== -->
+  <section class="screen is-active" data-screen="home" data-overlay="allowed" aria-label="Главный">
+    <div class="glow glow--lime" aria-hidden="true"></div>
     <header class="top">
       <div class="avatar" aria-hidden="true">М</div>
-      <div class="top__text">
-        <div class="top__hello">Привет, Маша!</div>
-        <div class="top__sub">Хороший день, чтобы копить</div>
-      </div>
     </header>
 
-    <article class="card card--account">
-      <div class="card__label">Мой счёт</div>
-      <div class="card__sum" id="homeBalance">1 250 ₽</div>
-      <div class="actions">
-        <button class="pill" data-go="pay">Оплатить</button>
-        <button class="pill" data-go="pay">Перевести</button>
-      </div>
-    </article>
-
-    <article class="card card--piggy" data-go="piggy" role="button" tabindex="0">
-      <div class="card__row">
-        <div class="piggy-icon" aria-hidden="true">🛴</div>
-        <div class="card__col">
-          <div class="card__label">Копилка «Самокат»</div>
-          <div class="card__sum card__sum--sm"><span id="homePiggy">980 ₽</span> <span class="muted" id="homeGoal">из 5 000 ₽</span></div>
-        </div>
-        <span class="spark" id="homeSpark" hidden>✨</span>
-        <span class="chev" aria-hidden="true">›</span>
-      </div>
-      <div class="bar"><div class="bar__fill" id="homeBar"></div></div>
-    </article>
-
-    <div class="tiles">
-      <div class="tile"><span>📚</span>Курсы</div>
-      <div class="tile"><span>✅</span>Задания</div>
-      <div class="tile"><span>🎮</span>Игры</div>
-      <div class="tile"><span>🎯</span>Цели</div>
+    <div class="kidcard" aria-hidden="true">
+      <div class="kidcard__art"><i></i><i></i><i></i><i></i><i></i></div>
     </div>
+    <article class="card balance">
+      <div class="sum sum--xl" id="homeBalance"></div>
+      <div class="balance__dots"><b></b><i></i><i></i></div>
+    </article>
+
+    <div class="quick">
+      <button class="qtile" data-go="pay"><span class="qtile__t">QR</span><span class="qtile__ic qtile__ic--violet"><svg><use href="#i-qr"/></svg></span></button>
+      <button class="qtile" data-go="pay"><span class="qtile__t">Скинуть денег</span><span class="qtile__ic qtile__ic--blue"><svg><use href="#i-arrow"/></svg></span></button>
+      <button class="qtile" data-go="pay"><span class="qtile__t">Пополнить мобилку</span><span class="qtile__ic qtile__ic--mint"><svg><use href="#i-phone"/></svg></span></button>
+    </div>
+
+    <button class="promo" data-tab="piggies">
+      <span class="promo__t">Копи на мечту</span>
+      <span class="promo__s">Красивые числа в копилке оживают</span>
+      <span class="promo__coin" aria-hidden="true">₽</span>
+    </button>
+
+    <h2 class="h2">История</h2>
+    <ul class="card list" id="homeHistory"></ul>
+    <button class="btn btn--white" data-go="pay">Посмотреть историю</button>
   </section>
 
-  <!-- ========== КОПИЛКА — здесь живёт прикол ========== -->
+  <!-- ========== КОПИЛКИ (вкладка) ========== -->
+  <section class="screen" data-screen="piggies" data-overlay="allowed" aria-label="Копилки">
+    <div class="glow glow--sunset" aria-hidden="true"></div>
+    <header class="top top--split">
+      <div class="avatar" aria-hidden="true">М</div>
+      <button class="sqbtn" aria-label="Создать копилку"><svg><use href="#i-plus"/></svg></button>
+    </header>
+
+    <article class="card total">
+      <div class="total__main">
+        <div class="sum sum--xl" id="totalSum"></div>
+        <div class="muted">Всего на копилках</div>
+        <div class="total__pig" aria-hidden="true">🐷</div>
+      </div>
+      <div class="total__row"><span>Годовой процент</span><b>11%</b></div>
+    </article>
+
+    <div id="piggyList"></div>
+
+    <button class="btn btn--grad"><svg class="btn__ic"><use href="#i-plus"/></svg>Создать копилку</button>
+  </section>
+
+  <!-- ========== ЭКРАН КОПИЛКИ — здесь живёт прикол ========== -->
   <section class="screen" data-screen="piggy" data-overlay="allowed" aria-label="Копилка">
+    <div class="glow glow--sunset" aria-hidden="true"></div>
     <header class="nav">
-      <button class="nav__back" data-back aria-label="Назад">‹</button>
-      <div class="nav__title">Копилка</div>
-      <button class="nav__icon" id="soundBtn" aria-label="Звук выключен" title="Звук">🔇</button>
+      <button class="nav__btn" data-back aria-label="Назад"><svg><use href="#i-back"/></svg></button>
+      <div class="nav__title" id="piggyTitle">Копилка</div>
+      <button class="nav__btn" id="soundBtn" aria-label="Звук выключен"><svg><use href="#i-sound-off"/></svg></button>
     </header>
 
-    <div class="goal">
-      <div class="goal__pic" aria-hidden="true">🛴</div>
-      <div class="goal__name">Самокат</div>
-    </div>
+    <article class="card hero">
+      <div class="hero__pic" id="piggyPic" aria-hidden="true">🛴</div>
 
-    <div class="amount-wrap" id="amountWrap">
-      <button class="amount" id="amount" aria-live="polite" aria-label="Сумма в копилке"></button>
-      <div class="tap-hint" id="tapHint" hidden></div>
-    </div>
-    <div class="soft-hint" id="softHint" hidden></div>
-
-    <div class="progress">
-      <div class="bar bar--big"><div class="bar__fill" id="piggyBar"></div>
-        <i style="left:25%"></i><i style="left:50%"></i><i style="left:75%"></i>
+      <div class="amount-wrap" id="amountWrap">
+        <button class="amount" id="amount" aria-live="polite" aria-label="Сумма в копилке"></button>
+        <div class="tap-hint" id="tapHint" hidden></div>
       </div>
-      <div class="progress__meta"><span id="piggyPct">20%</span><span id="piggyGoal">цель 5 000 ₽</span></div>
-    </div>
 
-    <button class="btn btn--primary" data-go="topup">Пополнить копилку</button>
+      <div class="progress">
+        <div class="progress__meta"><span id="piggyPct">0%</span><span id="piggyGoal">из 0 ₽</span></div>
+        <div class="bar bar--big"><div class="bar__fill" id="piggyBar"></div>
+          <i style="left:25%"></i><i style="left:50%"></i><i style="left:75%"></i>
+        </div>
+      </div>
+      <div class="soft-hint" id="softHint" hidden></div>
+    </article>
 
-    <h3 class="h3">История</h3>
-    <ul class="history" id="history"></ul>
+    <button class="btn btn--grad" data-go="topup"><svg class="btn__ic"><use href="#i-plus"/></svg>Пополнить копилку</button>
+
+    <h2 class="h2">История копилки</h2>
+    <ul class="card list" id="history"></ul>
   </section>
 
-  <!-- ========== ПЕРЕВОД В КОПИЛКУ — экран перевода, прикол запрещён ========== -->
+  <!-- ========== ПОПОЛНЕНИЕ — экран перевода, прикол запрещён ========== -->
   <section class="screen" data-screen="topup" data-overlay="forbidden" aria-label="Пополнение копилки">
     <header class="nav">
-      <button class="nav__back" data-back aria-label="Назад">‹</button>
+      <button class="nav__btn" data-back aria-label="Назад"><svg><use href="#i-back"/></svg></button>
       <div class="nav__title">Пополнить копилку</div>
-      <span class="nav__icon"></span>
+      <span class="nav__btn"></span>
     </header>
-    <div class="form">
-      <div class="from">Со счёта: <b id="topupBalance">1 250 ₽</b></div>
+    <article class="card form">
+      <div class="from">
+        <span class="from__ic"><svg><use href="#i-arrow"/></svg></span>
+        <span><span class="muted">Со счёта</span><br><b id="topupBalance">0 ₽</b></span>
+      </div>
       <label class="field">
-        <span>Сколько отложить</span>
+        <span class="muted">Сколько отложить</span>
         <input id="topupInput" inputmode="numeric" pattern="[0-9]*" placeholder="0 ₽" autocomplete="off">
       </label>
       <div class="chips" id="chips">
-        <button data-add="10">10 ₽</button><button data-add="20">20 ₽</button>
-        <button data-add="50">50 ₽</button><button data-add="100">100 ₽</button>
-        <button data-add="200">200 ₽</button><button data-add="500">500 ₽</button>
+        <button data-add="10">+10 ₽</button><button data-add="20">+20 ₽</button>
+        <button data-add="50">+50 ₽</button><button data-add="100">+100 ₽</button>
+        <button data-add="200">+200 ₽</button><button data-add="500">+500 ₽</button>
       </div>
       <div class="error" id="topupError" hidden></div>
-    </div>
-    <button class="btn btn--primary" id="topupGo">Отложить в копилку</button>
+    </article>
+    <button class="btn btn--grad" id="topupGo">Отложить в копилку</button>
   </section>
 
   <!-- ========== ОПЛАТА — критичный экран, прикол запрещён ========== -->
   <section class="screen" data-screen="pay" data-overlay="forbidden" aria-label="Оплата">
     <header class="nav">
-      <button class="nav__back" data-back aria-label="Назад">‹</button>
-      <div class="nav__title">Оплата и переводы</div>
-      <span class="nav__icon"></span>
+      <button class="nav__btn" data-back aria-label="Назад"><svg><use href="#i-back"/></svg></button>
+      <div class="nav__title">Платежи и переводы</div>
+      <span class="nav__btn"></span>
     </header>
-    <div class="stub">
+    <article class="card stub">
       <div class="stub__icon">🔒</div>
-      <p>Это заглушка экрана оплаты из основного приложения.</p>
-      <p class="muted">Здесь слой эффектов отключён полностью: на экранах оплаты, перевода, реквизитов и лимитов прикол не появляется.</p>
-    </div>
+      <p><b>Заглушка экрана оплаты</b></p>
+      <p class="muted">На экранах оплаты, перевода, реквизитов и лимитов слой эффектов отключён полностью.</p>
+    </article>
   </section>
+
+  <!-- ========== ТАБ-БАР ========== -->
+  <nav class="tabbar" id="tabbar" aria-label="Разделы">
+    <button class="tab is-active" data-tab="home"><svg><use href="#i-home"/></svg><span>Главный</span></button>
+    <button class="tab" data-tab="piggies"><svg><use href="#i-piggy"/></svg><span>Копилки</span></button>
+    <button class="tab tab--center" aria-label="Помощник"><span class="tab__orb"><svg><use href="#i-spark"/></svg></span></button>
+    <button class="tab" data-go="pay"><svg><use href="#i-check"/></svg><span>Дела</span></button>
+    <button class="tab" data-go="pay"><svg><use href="#i-spark"/></svg><span>Контент</span></button>
+  </nav>
 
   <!-- ========== СЛОЙ ЭФФЕКТОВ: поверх всего, не перехватывает касания ========== -->
   <div class="fx" id="fx" aria-hidden="true">
@@ -133,7 +178,7 @@
       <button class="demo__close" id="demoClose" aria-label="Закрыть">✕</button>
     </div>
     <div class="demo__sec">
-      <div class="demo__label">Сумма в копилке</div>
+      <div class="demo__label">Сумма в копилке «Самокат»</div>
       <div class="demo__presets" id="presets">
         <button data-set="995">995</button><button data-set="1000">1 000</button>
         <button data-set="1230">1 230</button><button data-set="1234">1 234</button>

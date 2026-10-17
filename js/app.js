@@ -1,6 +1,6 @@
 /*
- * Прототип: заглушки экранов + подключение слоя «красивых чисел» к копилке.
- * Экраны здесь — макет для демо. Внедряемая часть — engine.js (правила), overlay.js (слой) и config/effects.json.
+ * Прототип: экраны по макетам СберKids + подключение слоя «красивых чисел» к копилке.
+ * Экраны — макет для демо. Внедряемая часть — engine.js (правила), overlay.js (слой) и config/effects.json.
  */
 (function () {
   'use strict';
@@ -8,17 +8,29 @@
   var E = KB.engine, FX = KB.overlay;
   var CONFIG_URL = 'config/effects.json';   // в проде — ключ CMS или файл на CDN
   var CACHE_KEY = 'kb.effects.cache';
+  var ROOTS = ['home', 'piggies'];
 
   var state = {
-    balance: 1250,
-    piggy: 980,
-    goal: 5000,
-    history: [
-      { title: 'Отложено со счёта', sum: 200, when: 'вчера' },
-      { title: 'Отложено со счёта', sum: 500, when: '12 окт' },
-      { title: 'Подарок от бабушки', sum: 280, when: '5 окт' }
+    balance: 3250,
+    piggies: [
+      { id: 'scooter', name: 'Самокат', pic: '🛴', bg: '#fff3e0', amount: 980, goal: 5000, demo: true,
+        history: [
+          { title: 'Отложено со счёта', sum: 200, when: 'вчера' },
+          { title: 'Отложено со счёта', sum: 500, when: '12 октября' },
+          { title: 'Подарок от бабушки', sum: 280, when: '5 октября' }
+        ] },
+      { id: 'boots', name: 'Резиновые сапоги', pic: '🥾', bg: '#ffe9e4', amount: 450, goal: 500, history: [] },
+      { id: 'slime', name: 'Слайм розовый', pic: '🫧', bg: '#eceaff', amount: 580, goal: 700, history: [] },
+      { id: 'pens', name: 'Фломастеры', pic: '🖍️', bg: '#e6f4ff', amount: 100, goal: 200, history: [] },
+      { id: 'robot', name: 'Робот', pic: '🤖', bg: '#e4f7f4', amount: 3950, goal: 12000, history: [] }
     ],
-    raw: null,          // исходный JSON конфига (как пришёл из CMS)
+    sel: 0,
+    homeHistory: [
+      { title: 'Канцтовары', sub: 'Покупка', sum: -240, ic: 'cart', tone: 'violet' },
+      { title: 'В копилку «Самокат»', sub: 'Перевод', sum: -200, ic: 'piggy', tone: 'green' },
+      { title: 'От мамы', sub: 'Пополнение', sum: 500, ic: 'gift', tone: 'peach' }
+    ],
+    raw: null,             // исходный JSON конфига (как пришёл из CMS)
     cfg: E.sanitize(null), // до загрузки конфига эффекты выключены — главный экран не ждёт
     seasonOverride: 'auto',
     stack: ['home']
@@ -27,12 +39,25 @@
   var $ = function (id) { return document.getElementById(id); };
   var app = $('app');
   var amountEl = $('amount');
+  function P() { return state.piggies[state.sel]; }
+
+  function sumHTML(n) {
+    var sign = n < 0 ? '−' : '';
+    var s = String(Math.abs(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    return sign + s + ' <span class="rub">₽</span>';
+  }
 
   /* ================= навигация ================= */
 
   function screenEl(name) { return app.querySelector('[data-screen="' + name + '"]'); }
   function current() { return state.stack[state.stack.length - 1]; }
   function isForbidden() { return screenEl(current()).getAttribute('data-overlay') === 'forbidden'; }
+  function syncChrome() {
+    var root = ROOTS.indexOf(current()) !== -1;
+    app.classList.toggle('is-root', root);
+    var tabs = app.querySelectorAll('.tab[data-tab]');
+    for (var i = 0; i < tabs.length; i++) tabs[i].classList.toggle('is-active', tabs[i].getAttribute('data-tab') === state.stack[0]);
+  }
 
   function go(name) {
     if (current() === name) return;
@@ -40,8 +65,9 @@
     prev.classList.remove('is-active'); prev.classList.add('is-behind');
     state.stack.push(name);
     var next = screenEl(name);
-    next.classList.remove('is-behind'); next.classList.add('is-active');
+    next.classList.remove('is-behind', 'is-tab'); next.classList.add('is-active');
     next.scrollTop = 0;
+    syncChrome();
     onEnter(name);
   }
 
@@ -51,7 +77,25 @@
     leaving.classList.remove('is-active', 'is-behind');
     var to = screenEl(current());
     to.classList.remove('is-behind'); to.classList.add('is-active');
+    syncChrome();
     onEnter(current(), { from: leaving.getAttribute('data-screen') });
+  }
+
+  // Переключение вкладок: без анимации сдвига, как в приложении
+  function tab(name) {
+    while (state.stack.length > 1) {
+      var s = screenEl(state.stack.pop());
+      s.classList.remove('is-active', 'is-behind');
+    }
+    if (state.stack[0] === name) { screenEl(name).scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    var old = screenEl(state.stack[0]);
+    old.classList.add('is-tab'); old.classList.remove('is-active', 'is-behind');
+    state.stack = [name];
+    var el = screenEl(name);
+    el.classList.add('is-tab', 'is-active');
+    el.scrollTop = 0;
+    syncChrome();
+    onEnter(name);
   }
 
   function onEnter(name, info) {
@@ -59,10 +103,15 @@
     if (name === 'piggy') enterPiggy(info);
     if (name === 'topup') enterTopup();
     if (name === 'home') renderHome();
+    if (name === 'piggies') renderPiggies();
   }
 
   app.addEventListener('click', function (e) {
-    var t = e.target.closest('[data-go]');
+    var t = e.target.closest('[data-tab]');
+    if (t) { tab(t.getAttribute('data-tab')); return; }
+    var p = e.target.closest('[data-piggy]');
+    if (p) { state.sel = +p.getAttribute('data-piggy'); go('piggy'); return; }
+    t = e.target.closest('[data-go]');
     if (t) { go(t.getAttribute('data-go')); return; }
     if (e.target.closest('[data-back]')) back();
   });
@@ -73,6 +122,7 @@
     state.raw = raw;
     state.cfg = E.sanitize(raw);
     renderHome();
+    renderPiggies();
     if (current() === 'piggy') renderPiggy({ auto: false });
     return state.cfg;
   }
@@ -94,21 +144,50 @@
       });
   }
 
-  /* ================= главная ================= */
+  /* ================= главный ================= */
 
   function renderHome() {
-    $('homeBalance').textContent = E.formatRub(state.balance);
-    $('homePiggy').textContent = E.formatRub(state.piggy);
-    $('homeGoal').textContent = 'из ' + E.formatRub(state.goal);
-    $('homeBar').style.width = pct() + '%';
-    $('homeSpark').hidden = !E.classify(state.piggy, state.cfg);
+    $('homeBalance').innerHTML = sumHTML(state.balance);
+    $('homeHistory').innerHTML = state.homeHistory.map(function (h) {
+      return '<li><span class="list__ic list__ic--' + h.tone + '"><svg><use href="#i-' + h.ic + '"/></svg></span>' +
+        '<span class="list__txt"><div class="list__title">' + h.title + '</div><div class="list__sub">' + h.sub + '</div></span>' +
+        '<span class="list__sum' + (h.sum > 0 ? ' plus' : '') + '">' + (h.sum > 0 ? '+' : '') + sumHTML(h.sum) + '</span></li>';
+    }).join('');
   }
 
-  function pct() { return Math.min(100, Math.round(state.piggy / state.goal * 100)); }
+  /* ================= вкладка «Копилки» ================= */
 
-  /* ================= копилка ================= */
+  function renderPiggies() {
+    var total = state.piggies.reduce(function (a, p) { return a + p.amount; }, 0);
+    $('totalSum').innerHTML = sumHTML(total);
+    $('piggyList').innerHTML = state.piggies.map(function (p, i) {
+      var pct = Math.min(100, Math.round(p.amount / p.goal * 100));
+      if (p.amount >= p.goal) {
+        return '<button class="pcard pcard--done" data-piggy="' + i + '">' +
+          '<span class="pcard__pic" style="background:#fff">' + p.pic + '</span>' +
+          '<span class="pcard__body"><span class="pcard__name">Ура! Ты накопил на «' + p.name + '»</span>' +
+          '<span class="pill">Отметить покупку</span></span></button>';
+      }
+      var pretty = E.classify(p.amount, state.cfg);
+      return '<button class="pcard" data-piggy="' + i + '">' +
+        '<span class="pcard__pic" style="background:' + p.bg + '">' + p.pic + '</span>' +
+        '<span class="pcard__body">' +
+          '<span class="pcard__top"><span class="sum sum--md">' + sumHTML(p.amount) +
+            (pretty ? '<svg class="pcard__spark" aria-label="красивое число"><use href="#i-spark"/></svg>' : '') + '</span>' +
+            '<span class="pcard__of">из ' + E.formatRub(p.goal) + '</span></span>' +
+          '<div class="bar"><div class="bar__fill" style="width:' + pct + '%"></div></div>' +
+          '<div class="pcard__name">' + p.name + '</div>' +
+        '</span></button>';
+    }).join('');
+  }
+
+  /* ================= экран копилки ================= */
 
   function enterPiggy(info) {
+    var p = P();
+    $('piggyTitle').textContent = p.name;
+    $('piggyPic').textContent = p.pic;
+    $('piggyPic').style.background = p.bg;
     if (info && info.from === 'topup' && state.pendingTopup) {
       var t = state.pendingTopup; state.pendingTopup = null;
       renderPiggy({ auto: false, value: t.from });
@@ -119,7 +198,8 @@
   }
 
   function renderPiggy(opts) {
-    var value = opts.value !== undefined ? opts.value : state.piggy;
+    var p = P();
+    var value = opts.value !== undefined ? opts.value : p.amount;
     var hit = E.classify(value, state.cfg);
     renderAmount(value, hit);
     renderProgress(value);
@@ -178,25 +258,29 @@
   }
 
   function renderProgress(value) {
-    var p = Math.min(100, Math.round(value / state.goal * 100));
+    var goal = P().goal;
+    var p = Math.min(100, Math.round(value / goal * 100));
     $('piggyBar').style.width = p + '%';
-    $('piggyPct').textContent = p + '%';
-    $('piggyGoal').textContent = 'цель ' + E.formatRub(state.goal);
+    $('piggyPct').textContent = p + '% накоплено';
+    $('piggyGoal').textContent = 'из ' + E.formatRub(goal);
   }
 
   // Мягкая подсказка «до красивого числа». Только на экране копилки, без сроков и давления; выключается из CMS.
   function renderSoftHint(value) {
     var el = $('softHint');
     var next = E.findNext(value, state.cfg);
-    if (!next || value >= state.goal) { el.hidden = true; return; }
+    if (!next || value >= P().goal) { el.hidden = true; return; }
     el.textContent = E.fillTemplate(state.cfg.hint.text, { next: E.formatRub(next.value), gap: next.gap });
     el.hidden = false;
   }
 
   function renderHistory() {
-    $('history').innerHTML = state.history.map(function (h) {
-      return '<li><span>' + h.title + '<br><small class="muted">' + h.when + '</small></span><span class="plus">+' + E.formatRub(h.sum) + '</span></li>';
-    }).join('');
+    var h = P().history;
+    $('history').innerHTML = h.length ? h.map(function (x) {
+      return '<li><span class="list__ic list__ic--green"><svg><use href="#i-piggy"/></svg></span>' +
+        '<span class="list__txt"><div class="list__title">' + x.title + '</div><div class="list__sub">' + x.when + '</div></span>' +
+        '<span class="list__sum plus">+' + sumHTML(x.sum) + '</span></li>';
+    }).join('') : '<li><span class="list__sub">Пока пусто — отложи первые монетки</span></li>';
   }
 
   /* ================= эффекты ================= */
@@ -230,7 +314,7 @@
   }
 
   function paletteOf(st) {
-    return [st.color, st.accent].concat(st.palette || []).filter(Boolean).concat(['#ffd45c', '#4dabf7']);
+    return [st.color, st.accent].concat(st.palette || []).filter(Boolean).concat(['#ffd45c', '#5ccf52', '#7fd6f7']);
   }
 
   // Полный эффект: вариант анимации выбирается из списка в конфиге, поэтому повторный показ не одинаковый.
@@ -266,7 +350,7 @@
 
   amountEl.addEventListener('click', function () {
     askMotionPermission();
-    var hit = E.classify(state.piggy, state.cfg);
+    var hit = E.classify(P().amount, state.cfg);
     if (hit) fullEffect(hit);
     else { FX.haptic(10); amountEl.classList.remove('is-pop'); void amountEl.offsetWidth; amountEl.classList.add('is-pop'); }
   });
@@ -291,11 +375,13 @@
     var err = $('topupError');
     if (sum <= 0) { err.textContent = 'Введи сумму'; err.hidden = false; return; }
     if (sum > state.balance) { err.textContent = 'На счёте столько нет'; err.hidden = false; return; }
-    var from = state.piggy;
+    var p = P(), from = p.amount;
     state.balance -= sum;
-    state.piggy += sum;
-    state.history.unshift({ title: 'Отложено со счёта', sum: sum, when: 'только что' });
-    state.pendingTopup = { from: from, to: state.piggy };
+    p.amount += sum;
+    p.history.unshift({ title: 'Отложено со счёта', sum: sum, when: 'только что' });
+    state.homeHistory.unshift({ title: 'В копилку «' + p.name + '»', sub: 'Перевод', sum: -sum, ic: 'piggy', tone: 'green' });
+    state.homeHistory.length = Math.min(state.homeHistory.length, 3);
+    state.pendingTopup = { from: from, to: p.amount };
     back(); // возвращаемся в копилку — эффект запускается уже там, не на экране перевода
   });
 
@@ -333,12 +419,13 @@
       else if (cfg.autoOnTopup === 'hint') autoShow(hit, 'hint');
     }
     if (cfg.milestones) {
-      var crossed = E.crossedMilestones(from, to, state.goal, cfg.milestones.percents);
+      var goal = P().goal;
+      var crossed = E.crossedMilestones(from, to, goal, cfg.milestones.percents);
       if (crossed.length) {
         var top = crossed[crossed.length - 1];
-        var text = E.fillTemplate(cfg.milestones.texts[String(top)] || ('Пройдено ' + top + '% пути к цели!'), { goal: E.formatRub(state.goal) });
+        var text = E.fillTemplate(cfg.milestones.texts[String(top)] || ('Пройдено ' + top + '% пути к цели!'), { goal: E.formatRub(goal) });
         FX.play(cfg.milestones.effects.length ? cfg.milestones.effects : ['confetti'], originOfAmount(),
-          ['#34c46e', '#ffd45c', '#4dabf7', '#ff6b6b', '#9775fa'], cfg.maxEffectMs);
+          ['#5ccf52', '#c4f23a', '#7fd6f7', '#ffd45c', '#9b8cf5'], cfg.maxEffectMs);
         FX.toast(text, 2000);
         if (!hit) { FX.haptic([20, 50, 20]); FX.chime('milestone'); }
       }
@@ -362,7 +449,7 @@
     var now = Date.now();
     if (mag < 25 || now - lastShake < 1500) return;
     lastShake = now;
-    var hit = E.classify(state.piggy, state.cfg);
+    var hit = E.classify(P().amount, state.cfg);
     if (hit) fullEffect(hit);
     else if (state.cfg.enabled) {
       FX.play(['coins'], originOfAmount(), ['#ffd45c'], 1000);
@@ -374,8 +461,8 @@
   /* ================= звук ================= */
 
   $('soundBtn').addEventListener('click', function () {
-    var on = FX.setSound(this.textContent === '🔇');
-    this.textContent = on ? '🔊' : '🔇';
+    var on = FX.setSound(this.getAttribute('aria-label') === 'Звук выключен');
+    this.innerHTML = '<svg><use href="#i-sound-' + (on ? 'on' : 'off') + '"/></svg>';
     this.setAttribute('aria-label', on ? 'Звук включён' : 'Звук выключен');
   });
 
@@ -389,13 +476,11 @@
   $('demoClose').addEventListener('click', function () { demo.hidden = true; });
 
   function setPiggy(v) {
-    state.piggy = Math.max(0, v | 0);
-    renderHome();
+    state.sel = 0;                       // демо-копилка «Самокат»
+    P().amount = Math.max(0, v | 0);
     demo.hidden = true;
-    if (current() !== 'piggy') {
-      while (state.stack.length > 1) back();
-      go('piggy');
-    } else renderPiggy({ auto: true });
+    if (current() !== 'piggy') { tab('piggies'); go('piggy'); }
+    else renderPiggy({ auto: true });
   }
 
   $('presets').addEventListener('click', function (e) {
@@ -445,7 +530,8 @@
 
   FX.init({ isForbidden: isForbidden });
   renderHome();
-  renderHistory();
+  renderPiggies();
+  syncChrome();
   // Конфиг грузим после первой отрисовки, чтобы не замедлять запуск и главный экран.
   var idle = window.requestIdleCallback || function (fn) { return setTimeout(fn, 50); };
   idle(function () { loadConfig().then(applyConfig); });
