@@ -6,7 +6,11 @@
   <meta name="theme-color" content="#f2f4f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Копилка">
   <title>Копилка: красивые числа</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
   <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
@@ -198,8 +202,20 @@
       </div>
     </div>
     <div class="demo__sec">
-      <div class="demo__label">Конфиг (JSON по ключу CMS)</div>
-      <div class="demo__row demo__row--wrap">
+      <div class="demo__label">Красивые числа — правка без релиза (CMS)</div>
+      <ul class="cms" id="cmsRules"></ul>
+      <div class="cms-add">
+        <div class="demo__label demo__label--sub">Добавить своё число</div>
+        <div class="demo__row">
+          <input id="cmsNum" inputmode="numeric" placeholder="например 2026">
+          <select id="cmsStyle"></select>
+        </div>
+        <div class="demo__row">
+          <input id="cmsBadge" placeholder="Текст плашки: «Число этого года!»">
+          <button id="cmsAdd">Добавить</button>
+        </div>
+      </div>
+      <div class="demo__row demo__row--wrap demo__row--opts">
         <label><input type="checkbox" id="demoHint" checked> подсказка «до красивого числа»</label>
         <label>сезон
           <select id="demoSeason">
@@ -210,6 +226,10 @@
           </select>
         </label>
       </div>
+      <div class="demo__warn" id="cmsMsg"></div>
+    </div>
+    <details class="demo__sec">
+      <summary class="demo__label">Для разработчика: JSON по ключу CMS</summary>
       <textarea id="demoJson" spellcheck="false" rows="9"></textarea>
       <div class="demo__row">
         <button id="demoApply">Применить без релиза</button>
@@ -217,7 +237,8 @@
         <button id="demoReset" class="ghost">Сброс</button>
       </div>
       <div class="demo__warn" id="demoWarn"></div>
-    </div>
+    </details>
+    <div class="demo__sec demo__status" id="offlineStatus">Офлайн-режим: готовлю…</div>
   </aside>
 </div>
 

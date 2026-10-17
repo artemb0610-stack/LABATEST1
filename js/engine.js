@@ -168,6 +168,7 @@
     (Array.isArray(raw.rules) ? raw.rules : []).forEach(function (r, i) {
       var name = (r && r.id) || ('#' + i);
       if (!r || typeof r !== 'object') { warnings.push('Правило ' + name + ' пропущено: не объект'); return; }
+      if (r.enabled === false) return; // правило выключено контент-менеджером — молча пропускаем
       if (KNOWN_TYPES.indexOf(r.type) === -1) { warnings.push('Правило ' + name + ': неизвестный тип «' + r.type + '»'); return; }
       if (!cfg.styles[r.style]) { warnings.push('Правило ' + name + ': нет стиля «' + r.style + '»'); return; }
       var rule = {

@@ -102,6 +102,16 @@ t('частично битый конфиг: плохие правила отб�
   assert.strictEqual(E.classify(1000, c).rule.id, 'bn-1000');
 });
 
+t('отдельное правило можно выключить, своё число — добавить', function () {
+  var c2 = JSON.parse(JSON.stringify(raw));
+  c2.rules.forEach(function (r) { if (r.id === 'stairs') r.enabled = false; });
+  c2.rules.unshift({ id: 'custom-2026', type: 'exact', values: [2026], style: 'round', badge: 'Число года!', effects: ['confetti'] });
+  var c = E.sanitize(c2);
+  assert.deepStrictEqual(c.warnings, []);
+  assert.strictEqual(E.classify(1234, c), null);
+  assert.strictEqual(E.classify(2026, c).rule.id, 'custom-2026');
+});
+
 t('выключатель enabled', function () {
   var c = E.sanitize(Object.assign({}, raw, { enabled: false }));
   assert.strictEqual(E.classify(1000, c), null);

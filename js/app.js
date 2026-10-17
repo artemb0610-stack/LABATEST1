@@ -141,7 +141,8 @@
       .catch(function () {
         clearTimeout(timer);
         try { var c = localStorage.getItem(CACHE_KEY); if (c) return JSON.parse(c); } catch (e) { /* битый кэш */ }
-        return KB.DEFAULT_CONFIG || null;  // открыто как файл без сервера — берём встроенный
+        // открыто как файл без сервера — берём встроенный (копию, чтобы правки в демо-панели его не портили)
+        return KB.DEFAULT_CONFIG ? JSON.parse(JSON.stringify(KB.DEFAULT_CONFIG)) : null;
       });
   }
 
@@ -517,7 +518,84 @@
     $('demoJson').value = state.raw ? JSON.stringify(state.raw, null, 2) : '';
     $('demoHint').checked = !!(state.cfg.hint && state.cfg.hint.enabled);
     showWarnings();
+    renderCms();
   }
+
+  /* ----- редактор красивых чисел: то, что контент-менеджер меняет в CMS без релиза ----- */
+
+  var TYPE_INFO = {
+    repdigit: ['Одинаковые цифры', '777, 2 222, 7 777'],
+    sequence: ['Цифры по порядку', '123, 1 234, 4 321'],
+    palindrome: ['Зеркальные', '1 221, 12 321'],
+    regex: ['Повторяющиеся пары', '1 212, 2 020'],
+    round: ['Круглые', '300, 2 500, 10 000']
+  };
+  var STYLE_NAMES = {
+    'banknote-100': 'Купюра 100', 'banknote-500': 'Купюра 500', 'banknote-1000': 'Купюра 1 000',
+    'banknote-2000': 'Купюра 2 000', 'banknote-5000': 'Купюра 5 000', 'same-digits': 'Переливы',
+    'counting': 'Кубики', 'mirror': 'Зеркало', 'round': 'Зелёное'
+  };
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  function renderCms() {
+    var list = $('cmsRules');
+    if (!state.raw || !Array.isArray(state.raw.rules)) { list.innerHTML = '<li class="off">Конфиг не загружен — эффекты выключены</li>'; return; }
+    list.innerHTML = state.raw.rules.map(function (r, i) {
+      var name, ex;
+      if (r.type === 'exact') {
+        var nums = (r.values || []).map(function (v) { return E.formatRub(v).replace(' ₽', ''); }).join(', ');
+        name = /^bn-/.test(r.id) ? 'Как купюра ' + nums : 'Число ' + nums;
+        ex = r.badge || '';
+      } else {
+        var t = TYPE_INFO[r.type] || [r.type, ''];
+        name = t[0]; ex = t[1];
+      }
+      var custom = /^custom-/.test(r.id || '');
+      return '<li class="' + (r.enabled === false ? 'off' : '') + '">' +
+        '<button class="cms__sw" data-toggle="' + i + '" aria-label="Вкл/выкл"></button>' +
+        '<span class="cms__txt"><div class="cms__name">' + esc(name) + '</div><div class="cms__ex">' + esc(ex) + ' · ' + esc(STYLE_NAMES[r.style] || r.style) + '</div></span>' +
+        (custom ? '<button class="cms__del" data-del="' + i + '" aria-label="Удалить">✕</button>' : '') +
+        '</li>';
+    }).join('');
+    var sel = $('cmsStyle');
+    if (!sel.options.length && state.raw.styles) {
+      sel.innerHTML = Object.keys(state.raw.styles).map(function (k) {
+        return '<option value="' + esc(k) + '"' + (k === 'same-digits' ? ' selected' : '') + '>' + esc(STYLE_NAMES[k] || k) + '</option>';
+      }).join('');
+    }
+  }
+
+  function cmsApplied(text) {
+    applyConfig(state.raw);
+    $('demoJson').value = JSON.stringify(state.raw, null, 2);
+    renderCms();
+    var m = $('cmsMsg'); m.className = 'demo__warn ok'; m.textContent = text;
+  }
+
+  $('cmsRules').addEventListener('click', function (e) {
+    var t = e.target.closest('[data-toggle]'), d = e.target.closest('[data-del]');
+    if (t) {
+      var r = state.raw.rules[+t.getAttribute('data-toggle')];
+      r.enabled = r.enabled === false;
+      cmsApplied((r.enabled ? '✓ Включено' : '✓ Выключено') + ' — сразу, без релиза приложения');
+    } else if (d) {
+      state.raw.rules.splice(+d.getAttribute('data-del'), 1);
+      cmsApplied('✓ Число удалено');
+    }
+  });
+
+  $('cmsAdd').addEventListener('click', function () {
+    var n = parseInt($('cmsNum').value.replace(/\D/g, ''), 10);
+    var m = $('cmsMsg');
+    if (!(n > 0) || !state.raw) { m.className = 'demo__warn'; m.textContent = 'Введи число больше нуля'; return; }
+    var badge = $('cmsBadge').value.trim() || 'Особое число!';
+    state.raw.rules = (state.raw.rules || []).filter(function (r) { return r.id !== 'custom-' + n; });
+    state.raw.rules.unshift({ id: 'custom-' + n, type: 'exact', values: [n], style: $('cmsStyle').value,
+      hintable: true, badge: badge, effects: ['confetti', 'sparkles', 'coins'] });
+    $('cmsNum').value = ''; $('cmsBadge').value = '';
+    cmsApplied('✓ Число ' + E.formatRub(n) + ' добавлено без релиза');
+    setTimeout(function () { setPiggy(n); }, 600); // сразу показываем, как это выглядит у ребёнка
+  });
   function showWarnings(extra) {
     var w = (extra ? [extra] : []).concat(state.cfg.warnings || []);
     var el = $('demoWarn');
@@ -555,5 +633,18 @@
   syncChrome();
   // Конфиг грузим после первой отрисовки, чтобы не замедлять запуск и главный экран.
   var idle = window.requestIdleCallback || function (fn) { return setTimeout(fn, 50); };
-  idle(function () { loadConfig().then(applyConfig); });
+  idle(function () { loadConfig().then(function (raw) { applyConfig(raw); renderCms(); }); });
+
+  // Офлайн-режим: service worker кладёт все файлы в кэш телефона при первом открытии.
+  function setOffline(text, ok) {
+    var el = $('offlineStatus');
+    el.textContent = text; el.className = 'demo__sec demo__status' + (ok ? ' ok' : '');
+  }
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    navigator.serviceWorker.register('sw.js').then(function () { return navigator.serviceWorker.ready; })
+      .then(function () { setOffline('✓ Офлайн-режим готов: можно выключать интернет', true); })
+      .catch(function () { setOffline('Офлайн-режим недоступен в этом браузере'); });
+  } else {
+    setOffline('Офлайн-режим работает только при открытии по https-ссылке');
+  }
 })();
