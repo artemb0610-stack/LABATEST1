@@ -7,15 +7,61 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E879CB147ADD3019683C1312 /* Kopilka.swiftpm in Resources */ = {isa = PBXBuildFile; fileRef = 52BC11E355CD928F7851BCB2 /* Kopilka.swiftpm */; };
+		0EEF1D03CDB5D0C5D50CCB36 /* AmountDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C35AF6749A821060F907E29 /* AmountDigits.swift */; };
+		10962C76C3C2E55F02E86C33 /* KopilkaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E2C1F6CB18B9986D11AF32 /* KopilkaApp.swift */; };
+		46F54C8F6AF8DEAB27D79261 /* ConfigStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A19BACCF9ECE30574761FCF /* ConfigStore.swift */; };
+		5B23BE34358FBB7322038A42 /* ThemePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15577B2795265E58E3497186 /* ThemePicker.swift */; };
+		5C3D71DF0558D217EFA1D09A /* effects.json in Resources */ = {isa = PBXBuildFile; fileRef = E65BCA18A5C4DA7CEF24CA83 /* effects.json */; };
+		6B43C8EF7CAF2A4802F2569C /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B324EEF1BF4F573B518D6FB /* Config.swift */; };
+		8053FB3D6A58931D2A15BA09 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03EC7CCE973862388B74D43F /* AppStore.swift */; };
+		861D2EF2C5CF9244271ED955 /* DemoPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC35D4A99B64C3B70E20E201 /* DemoPanel.swift */; };
+		9DAF113AF9BDFD2D63AB8EB1 /* PrettyEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E39ABC8100A037D502BE645 /* PrettyEngine.swift */; };
+		A3E783C8791E7C1187677508 /* FX.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E08CEA7386772A9A85D327 /* FX.swift */; };
+		AE05D82EB9C5D5527C5999D3 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3B4080744A75EACA2F3AA9 /* HomeView.swift */; };
+		C57050AC452073C0510B13FA /* PrettyNumberKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F3E8A3855A94B9AF12EA41 /* PrettyNumberKit.swift */; };
+		D979175085685E036CA87F51 /* EmbeddedConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A99D79307E49BF8AEBCE1D /* EmbeddedConfig.swift */; };
+		DD4BF2E8088490C719C676FF /* PiggyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEEC620BF932E5EC175F9F2 /* PiggyView.swift */; };
+		FAF3712F54C03EDD8590253D /* Tokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46B3133B4C73BCA5BFAFE58 /* Tokens.swift */; };
+		FB2607EA7EF8E34CF77676D5 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727D7D7A07EC850BB13A6196 /* HistoryView.swift */; };
+		FE7F65B1DD8BFA948DC81500 /* PiggiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC3D64D90BB36CC648D76D8 /* PiggiesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		03EC7CCE973862388B74D43F /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
 		0E514A1AEA849D10B9FAFB25 /* Kopilka.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Kopilka.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		52BC11E355CD928F7851BCB2 /* Kopilka.swiftpm */ = {isa = PBXFileReference; path = Kopilka.swiftpm; sourceTree = "<group>"; };
+		15577B2795265E58E3497186 /* ThemePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePicker.swift; sourceTree = "<group>"; };
+		1B324EEF1BF4F573B518D6FB /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		1E39ABC8100A037D502BE645 /* PrettyEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrettyEngine.swift; sourceTree = "<group>"; };
+		30E2C1F6CB18B9986D11AF32 /* KopilkaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KopilkaApp.swift; sourceTree = "<group>"; };
+		3C35AF6749A821060F907E29 /* AmountDigits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountDigits.swift; sourceTree = "<group>"; };
+		50F3E8A3855A94B9AF12EA41 /* PrettyNumberKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrettyNumberKit.swift; sourceTree = "<group>"; };
+		5A3B4080744A75EACA2F3AA9 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		727D7D7A07EC850BB13A6196 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		7A19BACCF9ECE30574761FCF /* ConfigStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigStore.swift; sourceTree = "<group>"; };
+		A46B3133B4C73BCA5BFAFE58 /* Tokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tokens.swift; sourceTree = "<group>"; };
+		B2A99D79307E49BF8AEBCE1D /* EmbeddedConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddedConfig.swift; sourceTree = "<group>"; };
+		B9E08CEA7386772A9A85D327 /* FX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FX.swift; sourceTree = "<group>"; };
+		E65BCA18A5C4DA7CEF24CA83 /* effects.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = effects.json; sourceTree = "<group>"; };
+		EAEEC620BF932E5EC175F9F2 /* PiggyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiggyView.swift; sourceTree = "<group>"; };
+		EC35D4A99B64C3B70E20E201 /* DemoPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoPanel.swift; sourceTree = "<group>"; };
+		FBC3D64D90BB36CC648D76D8 /* PiggiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiggiesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		151FC56004C56991BE4E965E /* Kopilka */ = {
+			isa = PBXGroup;
+			children = (
+				C1FFB61C44CDD659BD4C14C7 /* App */,
+				E133820B934751DBECF5E55E /* DesignSystem */,
+				EBF87EEC3CC807ED8C0CBA80 /* Effects */,
+				A30C23044CC7F9717B536446 /* Engine */,
+				C72EA733343F31AF33FC0697 /* PrettyNumberKit */,
+				E1131FA62FFF94A461D9AEAC /* Resources */,
+				3ADC52F22E0F0C741CF07CEF /* Screens */,
+			);
+			name = Kopilka;
+			sourceTree = "<group>";
+		};
 		1CDA7877DF64F50B74763842 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -24,12 +70,85 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		3ADC52F22E0F0C741CF07CEF /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				EC35D4A99B64C3B70E20E201 /* DemoPanel.swift */,
+				727D7D7A07EC850BB13A6196 /* HistoryView.swift */,
+				5A3B4080744A75EACA2F3AA9 /* HomeView.swift */,
+				FBC3D64D90BB36CC648D76D8 /* PiggiesView.swift */,
+				EAEEC620BF932E5EC175F9F2 /* PiggyView.swift */,
+				15577B2795265E58E3497186 /* ThemePicker.swift */,
+			);
+			name = Screens;
+			path = Kopilka.swiftpm/Screens;
+			sourceTree = "<group>";
+		};
 		9C3B94E762214CD29412DBD5 = {
 			isa = PBXGroup;
 			children = (
-				52BC11E355CD928F7851BCB2 /* Kopilka.swiftpm */,
+				151FC56004C56991BE4E965E /* Kopilka */,
 				1CDA7877DF64F50B74763842 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		A30C23044CC7F9717B536446 /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				1B324EEF1BF4F573B518D6FB /* Config.swift */,
+				7A19BACCF9ECE30574761FCF /* ConfigStore.swift */,
+				B2A99D79307E49BF8AEBCE1D /* EmbeddedConfig.swift */,
+				1E39ABC8100A037D502BE645 /* PrettyEngine.swift */,
+			);
+			name = Engine;
+			path = Kopilka.swiftpm/Engine;
+			sourceTree = "<group>";
+		};
+		C1FFB61C44CDD659BD4C14C7 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				03EC7CCE973862388B74D43F /* AppStore.swift */,
+				30E2C1F6CB18B9986D11AF32 /* KopilkaApp.swift */,
+			);
+			name = App;
+			path = Kopilka.swiftpm/App;
+			sourceTree = "<group>";
+		};
+		C72EA733343F31AF33FC0697 /* PrettyNumberKit */ = {
+			isa = PBXGroup;
+			children = (
+				3C35AF6749A821060F907E29 /* AmountDigits.swift */,
+				50F3E8A3855A94B9AF12EA41 /* PrettyNumberKit.swift */,
+			);
+			name = PrettyNumberKit;
+			path = Kopilka.swiftpm/PrettyNumberKit;
+			sourceTree = "<group>";
+		};
+		E1131FA62FFF94A461D9AEAC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E65BCA18A5C4DA7CEF24CA83 /* effects.json */,
+			);
+			name = Resources;
+			path = Kopilka.swiftpm/Resources;
+			sourceTree = "<group>";
+		};
+		E133820B934751DBECF5E55E /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				A46B3133B4C73BCA5BFAFE58 /* Tokens.swift */,
+			);
+			name = DesignSystem;
+			path = Kopilka.swiftpm/DesignSystem;
+			sourceTree = "<group>";
+		};
+		EBF87EEC3CC807ED8C0CBA80 /* Effects */ = {
+			isa = PBXGroup;
+			children = (
+				B9E08CEA7386772A9A85D327 /* FX.swift */,
+			);
+			name = Effects;
+			path = Kopilka.swiftpm/Effects;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -91,7 +210,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E879CB147ADD3019683C1312 /* Kopilka.swiftpm in Resources */,
+				5C3D71DF0558D217EFA1D09A /* effects.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +221,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0EEF1D03CDB5D0C5D50CCB36 /* AmountDigits.swift in Sources */,
+				8053FB3D6A58931D2A15BA09 /* AppStore.swift in Sources */,
+				6B43C8EF7CAF2A4802F2569C /* Config.swift in Sources */,
+				46F54C8F6AF8DEAB27D79261 /* ConfigStore.swift in Sources */,
+				861D2EF2C5CF9244271ED955 /* DemoPanel.swift in Sources */,
+				D979175085685E036CA87F51 /* EmbeddedConfig.swift in Sources */,
+				A3E783C8791E7C1187677508 /* FX.swift in Sources */,
+				FB2607EA7EF8E34CF77676D5 /* HistoryView.swift in Sources */,
+				AE05D82EB9C5D5527C5999D3 /* HomeView.swift in Sources */,
+				10962C76C3C2E55F02E86C33 /* KopilkaApp.swift in Sources */,
+				FE7F65B1DD8BFA948DC81500 /* PiggiesView.swift in Sources */,
+				DD4BF2E8088490C719C676FF /* PiggyView.swift in Sources */,
+				9DAF113AF9BDFD2D63AB8EB1 /* PrettyEngine.swift in Sources */,
+				C57050AC452073C0510B13FA /* PrettyNumberKit.swift in Sources */,
+				5B23BE34358FBB7322038A42 /* ThemePicker.swift in Sources */,
+				FAF3712F54C03EDD8590253D /* Tokens.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
