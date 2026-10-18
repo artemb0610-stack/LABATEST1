@@ -264,6 +264,38 @@ span.nav__btn { background: none; }
 .list__ic--violet2 { background: #ece5ff; color: #9b7cf2; }
 .list__ic--letter { font: 800 18px var(--font-display); }
 
+/* ===== Пасхалка в конце истории ===== */
+.planet {
+  margin: 34px -16px calc(-28px - env(safe-area-inset-bottom)); text-align: center;
+  opacity: 0; transform: translateY(46px); transition: opacity .6s ease, transform .9s cubic-bezier(.2,.9,.2,1);
+}
+.planet.is-in { opacity: 1; transform: none; }
+.planet__cap { color: #aab1bb; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.planet__svg { display: block; width: 100%; height: auto; overflow: visible; }
+.planet__svg * { fill: none; stroke: #b9c0c9; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.planet__body { fill: #eaedf1 !important; stroke: #c3c9d1 !important; stroke-width: 2.5 !important; }
+.planet__line { stroke-dasharray: 3 7; stroke: #cfd4db !important; }
+.planet__crater { stroke: #c9ced6 !important; }
+.planet__stars * { stroke-width: 1.6; }
+.planet__stars circle { fill: #c9ced6 !important; stroke: none !important; }
+.planet__shadow { stroke: none !important; fill: #d9dde3 !important; }
+.planet__coin-face circle { fill: #f2f4f7 !important; }
+.planet__coin-rim { stroke-dasharray: 2 3; stroke-width: 1.4 !important; }
+.planet__coin { cursor: pointer; pointer-events: all; }
+.planet__coin-face, .planet__cloth { transform-box: fill-box; }
+.planet__coin-face { transform-origin: 50% 100%; transform: rotate(-8deg); }
+.planet__coin.is-flip .planet__coin-face { animation: coinFlip .9s cubic-bezier(.3,1.4,.5,1); }
+.planet__cloth { transform-origin: 0% 50%; animation: flagWave 2.6s ease-in-out infinite; }
+@keyframes coinFlip {
+  0% { transform: rotate(-8deg); }
+  30% { transform: translateY(-34px) scaleX(.12) rotate(0); }
+  55% { transform: translateY(-40px) scaleX(1) rotate(0); }
+  75% { transform: translateY(-14px) scaleX(.2) rotate(0); }
+  100% { transform: rotate(-8deg); }
+}
+@keyframes flagWave { 0%, 100% { transform: skewY(0) scaleX(1); } 50% { transform: skewY(-5deg) scaleX(.93); } }
+@media (prefers-reduced-motion: reduce) { .planet__cloth { animation: none; } .planet { transition: none; } }
+
 /* ===== Пополнение / оплата ===== */
 .form { padding: 22px; }
 .from { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; font-size: 15px; }

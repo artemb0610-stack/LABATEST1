@@ -277,13 +277,11 @@ this.KB.DEFAULT_CONFIG = {
   "scrollFx": {
     "enabled": true,
     "screens": [
-      "history",
-      "piggies",
-      "home"
+      "history"
     ],
-    "minSpeed": 1.1,
+    "minSpeed": 2.4,
     "lightning": true,
-    "lightningSpeed": 2.6,
+    "lightningSpeed": 4.2,
     "down": [
       "#3ddc84",
       "#2ec4f1",

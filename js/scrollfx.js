@@ -10,7 +10,7 @@
 (function (root) {
   'use strict';
 
-  var MAX = 110;
+  var MAX = 140;
   var canvas = document.createElement('canvas');
   canvas.className = 'sfx';
   canvas.setAttribute('aria-hidden', 'true');
@@ -55,12 +55,14 @@
     if (sp < cfg.minSpeed) return;
     var dir = v > 0 ? -1 : 1;                // вниз → следы летят вверх
     var cols = v > 0 ? cfg.down : cfg.up;
-    var n = Math.min(7, Math.floor(sp * 2));
+    // срабатывает только на сильной прокрутке, но сразу ощутимо: чем сильнее рывок, тем гуще и длиннее следы
+    var over = sp - cfg.minSpeed;
+    var n = Math.min(11, 4 + Math.floor(over * 3));
     for (var i = 0; i < n && parts.length < MAX; i++) {
       var x = rand(0, w), yy = rand(0, h);
-      var speed = 380 + sp * 520;
-      parts.push({ x: x, y: yy, vx: (x - w / 2) * (0.5 + sp * 0.25), vy: dir * speed,
-        len: Math.min(170, 30 + sp * 34), wd: rand(1.2, 2.6), c: pick(cols), t: 0, life: rand(0.25, 0.42) });
+      var speed = 700 + sp * 480;
+      parts.push({ x: x, y: yy, vx: (x - w / 2) * (0.8 + over * 0.35), vy: dir * speed,
+        len: Math.min(220, 70 + over * 50), wd: rand(1.6, 3.2), c: pick(cols), t: 0, life: rand(0.3, 0.48) });
     }
     if (cfg.lightning && sp >= cfg.lightningSpeed) {
       ['l', 'r'].forEach(function (side) {

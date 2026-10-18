@@ -272,6 +272,21 @@
     $('histList').innerHTML = html + (curDay ? '</ul>' : '');
   }
 
+  // Планета поднимается, когда долистали до конца истории
+  var planet = $('planet');
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) planet.classList.add('is-in'); });
+    }, { root: screenEl('history'), threshold: 0.15 }).observe(planet);
+  } else planet.classList.add('is-in');
+  // Пасхалка: монета подпрыгивает и переворачивается
+  $('planetCoin').addEventListener('click', function () {
+    var c = this;
+    c.classList.remove('is-flip'); void c.getBoundingClientRect(); c.classList.add('is-flip');
+    FX.haptic([10, 40, 10]); FX.chime('coin');
+    if (!c._found) { c._found = true; FX.toast('Пасхалка найдена! Ты долистал до самого начала', 2200); }
+  });
+
   /* ================= вкладка «Копилки» ================= */
 
   function renderPiggies() {
