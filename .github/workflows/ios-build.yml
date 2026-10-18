@@ -89,6 +89,16 @@ jobs:
           shot 09_history_end 5 -kbScreen history -kbHistoryEnd YES
           shot 10_demo 4 -kbScreen demo
           shot 11_history_long 12 -kbScreen history
+          # Эффект скорости: приложение само быстро листает историю, проверяем, что эффект сработал
+          xcrun simctl terminate "$UDID" "$BID" 2>/dev/null || true
+          ( xcrun simctl launch --console-pty "$UDID" "$BID" -kbScreen history -kbFling YES > fling.log 2>&1 & )
+          sleep 2.6; xcrun simctl io "$UDID" screenshot "shots/12_scrollfx_down.png" >/dev/null 2>&1
+          sleep 2.0; xcrun simctl io "$UDID" screenshot "shots/13_scrollfx_up.png" >/dev/null 2>&1
+          sleep 3
+          xcrun simctl terminate "$UDID" "$BID" 2>/dev/null || true
+          cp fling.log shots/fling.log || true
+          echo "--- fling.log ---"; grep "SCROLLFX" fling.log || true
+          if grep -q "SCROLLFX fired" fling.log; then echo "scroll effect: OK"; else echo "::error::эффект скорости не сработал при быстрой прокрутке"; fi
           mkdir -p shots/crash
           find ~/Library/Logs/DiagnosticReports -name "*.ips" -mmin -30 2>/dev/null | while read -r f; do cp "$f" shots/crash/; done
           ls shots/crash || true

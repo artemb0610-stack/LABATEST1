@@ -106,6 +106,7 @@ struct HistoryView: View {
                     }
                     .padding(.horizontal, 22).padding(.vertical, 18)
                     .background(DS.card, in: RoundedRectangle(cornerRadius: DS.rCard, style: .continuous))
+                    .id("histTop")
 
                     LazyVStack(alignment: .leading, spacing: 0) {
                         ForEach(groups) { g in
@@ -133,10 +134,14 @@ struct HistoryView: View {
                 .padding(.horizontal, 16)
             }
             .coordinateSpace(name: "hist")
-            .onPreferenceChange(ScrollOffsetKey.self) { y in speed.feed(offset: y, cfg: store.cfg.scrollFx) }
+            .modifier(ScrollOffsetReader(speed: speed, cfg: store.cfg.scrollFx))
             .onAppear {
                 if UserDefaults.standard.bool(forKey: "kbHistoryEnd") {   // только для CI-скриншотов
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { withAnimation { proxy.scrollTo("planet", anchor: .bottom) } }
+                }
+                if UserDefaults.standard.bool(forKey: "kbFling") {        // только для CI: быстрая прокрутка вниз и обратно
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { withAnimation(.easeInOut(duration: 1.0)) { proxy.scrollTo("planet", anchor: .bottom) } }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { withAnimation(.easeInOut(duration: 1.0)) { proxy.scrollTo("histTop", anchor: .top) } }
                 }
             }
             }
@@ -155,6 +160,22 @@ struct HistoryView: View {
         withAnimation(.spring(response: 0.6, dampingFraction: 0.55)) { coinFlip.toggle() }
         store.fx.haptic(.coin); store.fx.chime()
         if !found { found = true; store.fx.showToast("Пасхалка найдена! Ты долистал до самого начала", seconds: 2.2) }
+    }
+}
+
+/// Смещение прокрутки. iOS 18+: системный onScrollGeometryChange — точное значение на каждом кадре.
+/// iOS 17: GeometryReader + PreferenceKey (запасной путь).
+private struct ScrollOffsetReader: ViewModifier {
+    let speed: ScrollSpeedFX
+    let cfg: ScrollFxConfig
+    @ViewBuilder func body(content: Content) -> some View {
+        if #available(iOS 18.0, *) {
+            content.onScrollGeometryChange(for: CGFloat.self, of: { $0.contentOffset.y }) { _, y in
+                speed.feed(offset: -y, cfg: cfg)
+            }
+        } else {
+            content.onPreferenceChange(ScrollOffsetKey.self) { y in speed.feed(offset: y, cfg: cfg) }
+        }
     }
 }
 
@@ -188,7 +209,8 @@ final class ScrollSpeedFX: ObservableObject {
         defer { lastY = y; lastT = now }
         guard let ly = lastY, size.width > 0 else { return }
         let gapMs = now.timeIntervalSince(lastT) * 1000
-        let dt = max(12, gapMs)
+        guard gapMs > 0.5 else { return }          // два значения в один кадр — ждём следующего
+        let dt = max(4, gapMs)                     // реальное время между кадрами (на 120 Гц ≈ 8 мс)
         let inst = Double(ly - y) / dt            // > 0 — листаем вниз (контент уходит вверх)
         if gapMs > 150 { v = 0 }
         v = v * 0.55 + inst * 0.45
@@ -213,8 +235,12 @@ final class ScrollSpeedFX: ObservableObject {
                 bolts.append(makeBolt(left: left, w: w, h: h))
             }
         }
-        if !running { last = now; running = true }
+        if !running {
+            last = now; running = true
+            if debugLog { print("SCROLLFX fired speed=\(String(format: "%.2f", sp)) pt/ms dir=\(v > 0 ? "down" : "up")") }
+        }
     }
+    private let debugLog = UserDefaults.standard.bool(forKey: "kbFling")
 
     private func makeBolt(left: Bool, w: Double, h: Double) -> Bolt {
         let y0 = Double.random(in: h * 0.08 ... h * 0.55), len = Double.random(in: 140...280)
