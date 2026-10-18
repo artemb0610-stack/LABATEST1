@@ -50,9 +50,11 @@ struct HomeView: View {
 
                 HStack(spacing: 8) {
                     QuickTile(title: "QR", icon: "qrcode", tint: DS.violet, bg: DS.violetBg, iconLeading: true) { store.homePath.append(.pay) }
-                        .frame(maxWidth: .infinity).layoutPriority(0.7)
-                    QuickTile(title: "Скинуть денег", icon: "arrow.right", tint: DS.blue, bg: DS.blueBg) { store.homePath.append(.pay) }
-                    QuickTile(title: "Пополнить мобилку", icon: "iphone", tint: DS.mint, bg: DS.mintBg) { store.homePath.append(.pay) }
+                        .frame(width: 84)
+                    QuickTile(title: "Скинуть\nденег", icon: "arrow.right", tint: DS.blue, bg: DS.blueBg) { store.homePath.append(.pay) }
+                        .frame(maxWidth: .infinity)
+                    QuickTile(title: "Пополнить\nмобилку", icon: "iphone", tint: DS.mint, bg: DS.mintBg) { store.homePath.append(.pay) }
+                        .frame(maxWidth: .infinity)
                 }
                 .padding(.top, 16)
 
@@ -95,6 +97,7 @@ struct HomeView: View {
         }
         .screenBackground()
         .toolbar(.hidden, for: .navigationBar)
+        .toolbarRole(.editor)
         .onAppear {
             // Короткий «досчёт» баланса при открытии
             if shownBalance == 0 { withAnimation(.easeOut(duration: 0.7)) { shownBalance = store.balance } }
@@ -145,7 +148,7 @@ struct QuickTile: View {
         Button(action: action) {
             VStack(alignment: .leading) {
                 Text(title).font(DS.text(15, .bold)).foregroundStyle(DS.ink).multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
+                    .lineLimit(2).minimumScaleFactor(0.75)
                 Spacer(minLength: 8)
                 HStack {
                     if !iconLeading { Spacer() }

@@ -37,6 +37,7 @@ struct PiggyView: View {
         .screenBackground()
         .navigationTitle(p.name)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarRole(.editor)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {

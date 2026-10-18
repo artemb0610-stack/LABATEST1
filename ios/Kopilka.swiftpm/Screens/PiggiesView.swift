@@ -53,6 +53,7 @@ struct PiggiesView: View {
         }
         .screenBackground()
         .toolbar(.hidden, for: .navigationBar)
+        .toolbarRole(.editor)
     }
 }
 
