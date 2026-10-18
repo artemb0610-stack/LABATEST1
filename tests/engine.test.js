@@ -106,6 +106,16 @@ t('оформления цифр из конфига', function () {
   assert.deepStrictEqual(c.themes.map(function (t) { return t.id; }), ['auto']); // «Авто» есть всегда
 });
 
+t('эффект прокрутки: конфиг и защита от мусора', function () {
+  assert.strictEqual(cfg.scrollFx.enabled, true);
+  assert.ok(cfg.scrollFx.screens.indexOf('history') !== -1);
+  var c = E.sanitize(Object.assign({}, raw, { scrollFx: { minSpeed: 'быстро', down: ['red', 5], boltCore: 'x' } }));
+  assert.strictEqual(c.scrollFx.minSpeed, 1.1);
+  assert.deepStrictEqual(c.scrollFx.down, ['#3ddc84', '#2ec4f1']);
+  assert.strictEqual(c.scrollFx.boltCore, '#d9ffb0');
+  assert.strictEqual(E.sanitize(null).scrollFx.enabled, false);
+});
+
 t('выключатель enabled', function () {
   var c = E.sanitize(Object.assign({}, raw, { enabled: false }));
   assert.strictEqual(E.classify(1000, c), null);

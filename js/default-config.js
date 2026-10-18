@@ -274,6 +274,31 @@ this.KB.DEFAULT_CONFIG = {
     "enabled": true,
     "effect": "coinDrop"
   },
+  "scrollFx": {
+    "enabled": true,
+    "screens": [
+      "history",
+      "piggies",
+      "home"
+    ],
+    "minSpeed": 1.1,
+    "lightning": true,
+    "lightningSpeed": 2.6,
+    "down": [
+      "#3ddc84",
+      "#2ec4f1",
+      "#7fe3ff",
+      "#5ccf52"
+    ],
+    "up": [
+      "#a66cff",
+      "#ff5fa2",
+      "#4f7cff",
+      "#c38bff"
+    ],
+    "boltCore": "#d9ffb0",
+    "boltGlow": "#3ddc84"
+  },
   "seasons": [
     {
       "id": "autumn",

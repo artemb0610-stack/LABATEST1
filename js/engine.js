@@ -117,7 +117,7 @@
    */
   function sanitize(raw) {
     var warnings = [];
-    var OFF = { enabled: false, rules: [], styles: {}, seasons: [], themes: [], warnings: warnings };
+    var OFF = { enabled: false, rules: [], styles: {}, seasons: [], themes: [], scrollFx: { enabled: false, screens: [] }, warnings: warnings };
     if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
       warnings.push('Конфиг пустой или не объект — эффекты выключены');
       return OFF;
@@ -180,6 +180,24 @@
         texts: raw.milestones.texts && typeof raw.milestones.texts === 'object' ? raw.milestones.texts : {}
       };
     }
+
+    // Эффект скорости при прокрутке. Битые значения заменяются безопасными.
+    var sf = raw.scrollFx && typeof raw.scrollFx === 'object' ? raw.scrollFx : {};
+    var colors = function (arr, def) {
+      var ok = (Array.isArray(arr) ? arr : []).filter(function (c) { return typeof c === 'string' && /^#[0-9a-f]{3,8}$/i.test(c); });
+      return ok.length ? ok : def;
+    };
+    cfg.scrollFx = {
+      enabled: !!raw.scrollFx && sf.enabled !== false,
+      screens: (Array.isArray(sf.screens) ? sf.screens : ['history']).filter(function (x) { return typeof x === 'string'; }),
+      minSpeed: clampNum(sf.minSpeed, 0.3, 10, 1.1),
+      lightning: sf.lightning !== false,
+      lightningSpeed: clampNum(sf.lightningSpeed, 0.5, 20, 2.6),
+      down: colors(sf.down, ['#3ddc84', '#2ec4f1']),
+      up: colors(sf.up, ['#a66cff', '#ff5fa2']),
+      boltCore: colors([sf.boltCore], ['#d9ffb0'])[0],
+      boltGlow: colors([sf.boltGlow], ['#3ddc84'])[0]
+    };
 
     // Оформления цифр на выбор ребёнку. «auto» — без своего стиля: у каждого красивого числа свой.
     cfg.themes = [];

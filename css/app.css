@@ -245,6 +245,13 @@ span.nav__btn { background: none; }
 @keyframes fadeIn { from { opacity: 0; } }
 @keyframes sheetUp { from { transform: translateY(100%); } }
 
+/* Эффект скорости: sticky-холст во весь экран, ПОД карточками, не ловит касания */
+.screen > canvas.sfx {
+  position: sticky; top: calc(-1 * max(16px, env(safe-area-inset-top))); display: block; z-index: 0; pointer-events: none;
+  width: calc(100% + 32px); margin-left: -16px; margin-right: -16px;
+  margin-top: calc(-1 * max(16px, env(safe-area-inset-top)));
+}
+
 /* ===== История операций ===== */
 .hsum { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding: 18px 22px; }
 .hsum .muted { font-size: 13px; margin-bottom: 2px; }

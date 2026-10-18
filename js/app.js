@@ -126,6 +126,7 @@
   }
 
   function onEnter(name, info) {
+    KB.scrollFx.attach(screenEl(name));
     if (!$('styleSheet').hidden) closeStyleSheet();
     if (isForbidden()) FX.cancel();            // на оплату/перевод — слой гаснет мгновенно
     if (name === 'piggy') enterPiggy(info);
@@ -150,6 +151,8 @@
   function applyConfig(raw) {
     state.raw = raw;
     state.cfg = E.sanitize(raw);
+    KB.scrollFx.setConfig(state.cfg.scrollFx);
+    KB.scrollFx.attach(screenEl(current()));
     renderHome();
     renderPiggies();
     if (current() === 'piggy') renderPiggy({ auto: false });
@@ -776,6 +779,7 @@
   /* ================= старт ================= */
 
   FX.init({ isForbidden: isForbidden });
+  KB.scrollFx.init(app.querySelectorAll('.screen'));
   renderHome();
   renderPiggies();
   syncChrome();

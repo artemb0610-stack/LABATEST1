@@ -6,7 +6,7 @@
  *  - поэтому правки в репозитории доходят до телефонов сами, VERSION трогать не обязательно.
  * В нативном приложении это делает кэш CMS-ключа и ресурсы внутри сборки.
  */
-var VERSION = 'kopilka-v7';
+var VERSION = 'kopilka-v8';
 var SHELL = [
   './',
   'index.html',
@@ -14,6 +14,7 @@ var SHELL = [
   'js/engine.js',
   'js/default-config.js',
   'js/overlay.js',
+  'js/scrollfx.js',
   'js/app.js',
   'config/effects.json',
   'manifest.webmanifest',
