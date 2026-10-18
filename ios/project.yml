@@ -10,15 +10,23 @@ targets:
   Kopilka:
     type: application
     platform: iOS
+    # Папки перечислены по отдельности: папку с расширением .swiftpm XcodeGen считает одним файлом-пакетом.
     sources:
-      - path: Kopilka.swiftpm
-        excludes:
-          - Package.swift
-          - README.md
-          - "*.log"
-          - "*.json.tmp"
-          - shots
-          - dd
+      - path: Kopilka.swiftpm/App
+        group: Kopilka
+      - path: Kopilka.swiftpm/Engine
+        group: Kopilka
+      - path: Kopilka.swiftpm/DesignSystem
+        group: Kopilka
+      - path: Kopilka.swiftpm/PrettyNumberKit
+        group: Kopilka
+      - path: Kopilka.swiftpm/Effects
+        group: Kopilka
+      - path: Kopilka.swiftpm/Screens
+        group: Kopilka
+      - path: Kopilka.swiftpm/Resources
+        group: Kopilka
+        buildPhase: resources
     settings:
       base:
         PRODUCT_NAME: Kopilka

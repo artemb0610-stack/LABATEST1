@@ -26,7 +26,10 @@ jobs:
           brew install xcodegen
           cd ios
           xcodegen generate
-          ls -la Kopilka.xcodeproj
+          n=$(grep -c "\.swift in Sources" Kopilka.xcodeproj/project.pbxproj || true)
+          echo "Swift-файлов в проекте: $n"
+          test "$n" -ge 10 || { echo "::error::в проект не попали исходники"; exit 1; }
+          grep -q "effects.json in Resources" Kopilka.xcodeproj/project.pbxproj || { echo "::error::нет effects.json в ресурсах"; exit 1; }
       - name: Build generated project (iOS Simulator)
         shell: bash
         run: |
@@ -35,6 +38,7 @@ jobs:
           xcodebuild -project Kopilka.xcodeproj -scheme Kopilka \
             -destination 'generic/platform=iOS Simulator' build CODE_SIGNING_ALLOWED=NO 2>&1 | tee xcodeproj-build.log | grep -E "error:|BUILD (SUCCEEDED|FAILED)" || true
           grep -q "BUILD SUCCEEDED" xcodeproj-build.log
+          grep -q "CompileSwift\|SwiftCompile" xcodeproj-build.log || { echo "::error::Swift не компилировался"; exit 1; }
       - name: Commit project to repository
         shell: bash
         run: |
