@@ -1,8 +1,26 @@
 import SwiftUI
+import UIKit
 
 @main
 struct KopilkaApp: App {
     @StateObject private var store = AppStore()
+
+    init() {
+        // Кнопка «назад» — только стрелка, без подписи (как в макетах СберKids) на всех экранах.
+        let hidden: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.clear, .font: UIFont.systemFont(ofSize: 0.1)]
+        let standard = UINavigationBarAppearance()
+        standard.configureWithDefaultBackground()
+        standard.backButtonAppearance.normal.titleTextAttributes = hidden
+        standard.backButtonAppearance.highlighted.titleTextAttributes = hidden
+        let edge = UINavigationBarAppearance()
+        edge.configureWithTransparentBackground()
+        edge.backButtonAppearance.normal.titleTextAttributes = hidden
+        edge.backButtonAppearance.highlighted.titleTextAttributes = hidden
+        UINavigationBar.appearance().standardAppearance = standard
+        UINavigationBar.appearance().compactAppearance = standard
+        UINavigationBar.appearance().scrollEdgeAppearance = edge
+        UINavigationBar.appearance().tintColor = UIColor(red: 0.17, green: 0.70, blue: 0.30, alpha: 1)
+    }
 
     var body: some Scene {
         WindowGroup {
