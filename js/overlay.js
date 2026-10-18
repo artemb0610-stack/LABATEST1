@@ -11,7 +11,7 @@
 (function (root) {
   'use strict';
 
-  var MAX_PARTICLES = 140;
+  var MAX_PARTICLES = 240;
   var canvas, ctx, toastsEl, dpr = 1, w = 0, h = 0;
   var particles = [], rafId = 0, endAt = 0, isForbidden = function () { return false; };
   var soundOn = false, audioCtx = null;
@@ -35,32 +35,66 @@
 
   /* ---------- частицы ---------- */
 
+  // Праздничная радуга: сами цифры спокойные, а момент праздника — яркий.
+  var FESTIVE = ['#ff5a5f', '#ff9f1c', '#ffd23f', '#3ddc84', '#2ec4f1', '#4f7cff', '#a66cff', '#ff5fa2'];
   var COIN = ['#ffd45c', '#f2b630', '#ffe08a'];
   var LEAF = ['#e8772e', '#d9542c', '#f2b630', '#b8642a'];
 
   function rand(a, b) { return a + Math.random() * (b - a); }
   function pickOne(arr) { return arr[(Math.random() * arr.length) | 0]; }
+  function mix(palette) { return FESTIVE.concat(palette || []); }
 
   function spawn(kind, origin, palette, durMs) {
-    var n, i, life = durMs / 1000;
+    var n, i, a, sp, life = durMs / 1000, cols = mix(palette);
     switch (kind) {
       case 'coins':
         n = 18;
         for (i = 0; i < n; i++) push({ kind: 'coin', x: rand(20, w - 20), y: rand(-120, -20), vx: rand(-20, 20), vy: rand(120, 260),
           g: 520, r: rand(9, 14), spin: rand(4, 9), phase: rand(0, 6), color: pickOne(COIN), life: life });
+        // искорки вокруг монет
+        for (i = 0; i < 14; i++) push({ kind: 'star', x: rand(20, w - 20), y: rand(-60, h * 0.4), vx: 0, vy: rand(60, 140), g: 0,
+          r: rand(3, 6), phase: rand(0, 6), color: pickOne(['#fff3a6', '#ffd23f', '#ffffff']), life: life });
         break;
       case 'confetti':
-        n = 70;
+        n = 90;
         for (i = 0; i < n; i++) {
-          var a = rand(-Math.PI * 0.95, -Math.PI * 0.05), sp = rand(260, 560);
-          push({ kind: 'conf', x: origin.x, y: origin.y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, g: 700, drag: 0.985,
-            sw: rand(6, 10), sh: rand(3, 6), rot: rand(0, 6), vr: rand(-12, 12), color: pickOne(palette), life: life });
+          a = rand(-Math.PI * 0.95, -Math.PI * 0.05); sp = rand(280, 620);
+          push({ kind: 'conf', shape: (Math.random() * 3) | 0, x: origin.x, y: origin.y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+            g: 700, drag: 0.985, sw: rand(7, 11), sh: rand(4, 7), rot: rand(0, 6), vr: rand(-12, 12), color: pickOne(cols), life: life });
+        }
+        break;
+      case 'streamers':
+        // серпантин: волнистые цветные ленты сверху
+        n = 16;
+        for (i = 0; i < n; i++) push({ kind: 'ribbon', x: rand(10, w - 10), y: rand(-160, -20), vx: rand(-25, 25), vy: rand(170, 280), g: 60,
+          len: rand(26, 40), amp: rand(4, 7), phase: rand(0, 6), rot: rand(-0.6, 0.6), vr: rand(-2.5, 2.5), color: pickOne(FESTIVE), life: life });
+        break;
+      case 'fireworks':
+        // салют: 3 разноцветных взрыва в верхней части экрана, по очереди
+        for (var f = 0; f < 3; f++) {
+          var cx = rand(w * 0.18, w * 0.82), cy = rand(h * 0.1, h * 0.36), col = FESTIVE[(Math.random() * FESTIVE.length) | 0];
+          var col2 = pickOne(FESTIVE), delay = f * 0.28;
+          push({ kind: 'flash', x: cx, y: cy, delay: delay, r: 0, color: col, life: delay + 0.35, vx: 0, vy: 0, g: 0 });
+          for (i = 0; i < 30; i++) {
+            a = (i / 30) * Math.PI * 2 + rand(-0.08, 0.08); sp = rand(150, 260);
+            push({ kind: 'spark', x: cx, y: cy, delay: delay, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, g: 160, drag: 0.94,
+              r: rand(2, 3.4), color: i % 3 ? col : col2, life: Math.min(life, delay + rand(0.9, 1.3)) });
+          }
+        }
+        break;
+      case 'burst':
+        // радужное кольцо-волна и звёздочки от суммы
+        push({ kind: 'ring', x: origin.x, y: origin.y, vx: 0, vy: 0, g: 0, r0: Math.max(30, origin.rw * 0.6), r1: Math.max(120, origin.rw * 1.6), life: Math.min(life, 0.7) });
+        for (i = 0; i < 26; i++) {
+          a = (i / 26) * Math.PI * 2; sp = rand(180, 320);
+          push({ kind: 'star', x: origin.x, y: origin.y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, g: 0, drag: 0.9,
+            r: rand(4, 8), phase: rand(0, 6), color: FESTIVE[i % FESTIVE.length], life: Math.min(life, rand(0.6, 0.9)) });
         }
         break;
       case 'sparkles':
-        n = 22;
-        for (i = 0; i < n; i++) push({ kind: 'star', x: origin.x + rand(-origin.rw, origin.rw), y: origin.y + rand(-origin.rh, origin.rh),
-          vx: rand(-15, 15), vy: rand(-40, -5), g: 0, r: rand(4, 9), phase: rand(0, 6), color: pickOne(palette.concat(['#fff3a6'])), life: life * rand(0.6, 1) });
+        n = 30;
+        for (i = 0; i < n; i++) push({ kind: 'star', x: origin.x + rand(-origin.rw - 20, origin.rw + 20), y: origin.y + rand(-origin.rh - 20, origin.rh + 20),
+          vx: rand(-20, 20), vy: rand(-50, -5), g: 0, r: rand(4, 10), phase: rand(0, 6), color: pickOne(cols.concat(['#fff3a6'])), life: life * rand(0.6, 1) });
         break;
       case 'leaves':
         n = 14;
@@ -93,6 +127,7 @@
       var p = particles[i];
       p.t += dt;
       if (p.t > p.life || remaining <= 0) { particles.splice(i, 1); continue; }
+      if (p.delay && p.t < p.delay) continue;           // ждёт своей очереди (салют)
       p.vy += p.g * dt;
       if (p.drag) { p.vx *= p.drag; p.vy *= p.drag; }
       p.x += p.vx * dt + (p.sway ? Math.cos(p.t * 3 + p.phase) * p.sway * dt : 0);
@@ -130,8 +165,47 @@
       }
       case 'conf':
         ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
-        ctx.fillRect(-p.sw / 2, -p.sh / 2, p.sw, p.sh * Math.abs(Math.cos(p.rot * 2)) + 1);
+        var k = Math.abs(Math.cos(p.rot * 2)) * 0.8 + 0.2;     // «переворот» в воздухе
+        if (p.shape === 1) { ctx.beginPath(); ctx.ellipse(0, 0, p.sw / 2.4, p.sw / 2.4 * k, 0, 0, Math.PI * 2); ctx.fill(); }
+        else if (p.shape === 2) { ctx.beginPath(); ctx.moveTo(0, -p.sw / 2); ctx.lineTo(p.sw / 2, p.sw / 2 * k); ctx.lineTo(-p.sw / 2, p.sw / 2 * k); ctx.closePath(); ctx.fill(); }
+        else ctx.fillRect(-p.sw / 2, -p.sh / 2 * k, p.sw, p.sh * k + 1);
         ctx.restore(); break;
+      case 'ribbon': {
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+        ctx.strokeStyle = p.color; ctx.lineWidth = 4; ctx.lineCap = 'round';
+        ctx.beginPath();
+        for (var j = 0; j <= 10; j++) {
+          var yy = (j / 10 - 0.5) * p.len, xx = Math.sin(j * 0.9 + p.t * 9 + p.phase) * p.amp;
+          if (j) ctx.lineTo(xx, yy); else ctx.moveTo(xx, yy);
+        }
+        ctx.stroke(); ctx.restore(); break;
+      }
+      case 'spark': {
+        // искра салюта с коротким хвостом
+        ctx.strokeStyle = p.color; ctx.lineWidth = p.r; ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - p.vx * 0.035, p.y - p.vy * 0.035); ctx.stroke();
+        break;
+      }
+      case 'flash': {
+        var ft = (p.t - (p.delay || 0)) / 0.35, fr = 8 + ft * 34;
+        ctx.globalAlpha = Math.max(0, alpha * (1 - ft));
+        var g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, fr);
+        g.addColorStop(0, '#ffffff'); g.addColorStop(0.4, p.color); g.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, fr, 0, Math.PI * 2); ctx.fill();
+        break;
+      }
+      case 'ring': {
+        // радужная волна: кольцо из цветных дуг расходится от суммы
+        var rt = p.t / p.life, rr = p.r0 + (p.r1 - p.r0) * (1 - Math.pow(1 - rt, 3));
+        ctx.globalAlpha = Math.max(0, alpha * (1 - rt));
+        ctx.lineWidth = 10 * (1 - rt) + 2; ctx.lineCap = 'round';
+        var seg = (Math.PI * 2) / FESTIVE.length;
+        for (var q = 0; q < FESTIVE.length; q++) {
+          ctx.strokeStyle = FESTIVE[q]; ctx.beginPath();
+          ctx.arc(p.x, p.y, rr, q * seg + rt * 2, (q + 1) * seg + rt * 2 - 0.05); ctx.stroke();
+        }
+        break;
+      }
       case 'star': {
         var s = p.r * (0.6 + 0.4 * Math.sin(p.t * 10 + p.phase));
         ctx.save(); ctx.translate(p.x, p.y);

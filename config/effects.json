@@ -5,11 +5,6 @@
   "autoMode": "hint",
   "autoOnTopup": "full",
   "tapHint": "Нажми на цифры ✨",
-  "hint": {
-    "enabled": true,
-    "maxGap": 100,
-    "text": "До красивого числа {next} осталось {gap} ₽"
-  },
   "themes": [
     {
       "id": "auto",
@@ -128,9 +123,9 @@
         5000
       ],
       "style": "banknote-5000",
-      "hintable": true,
       "badge": "Как купюра в 5 000 ₽!",
       "effects": [
+        "fireworks",
         "coins",
         "confetti"
       ]
@@ -142,9 +137,9 @@
         2000
       ],
       "style": "banknote-2000",
-      "hintable": true,
       "badge": "Как купюра в 2 000 ₽!",
       "effects": [
+        "fireworks",
         "coins",
         "confetti"
       ]
@@ -156,11 +151,11 @@
         1000
       ],
       "style": "banknote-1000",
-      "hintable": true,
       "badge": "Как купюра в 1 000 ₽!",
       "effects": [
         "coins",
-        "confetti"
+        "confetti",
+        "fireworks"
       ]
     },
     {
@@ -170,11 +165,11 @@
         500
       ],
       "style": "banknote-500",
-      "hintable": true,
       "badge": "Как купюра в 500 ₽!",
       "effects": [
         "coins",
-        "sparkles"
+        "streamers",
+        "confetti"
       ]
     },
     {
@@ -184,10 +179,10 @@
         100
       ],
       "style": "banknote-100",
-      "hintable": true,
       "badge": "Как купюра в 100 ₽!",
       "effects": [
         "coins",
+        "streamers",
         "sparkles"
       ]
     },
@@ -196,10 +191,10 @@
       "type": "repdigit",
       "minLength": 3,
       "style": "same-digits",
-      "hintable": true,
       "badge": "Все цифры одинаковые!",
       "effects": [
-        "sparkles",
+        "fireworks",
+        "streamers",
         "confetti"
       ]
     },
@@ -208,11 +203,11 @@
       "type": "sequence",
       "minLength": 3,
       "style": "counting",
-      "hintable": true,
       "badge": "Цифры по порядку — как при счёте!",
       "effects": [
         "confetti",
-        "sparkles"
+        "streamers",
+        "fireworks"
       ]
     },
     {
@@ -220,10 +215,11 @@
       "type": "palindrome",
       "minLength": 3,
       "style": "mirror",
-      "hintable": false,
       "badge": "Число-зеркало: читается с двух сторон!",
       "effects": [
-        "sparkles"
+        "sparkles",
+        "streamers",
+        "confetti"
       ]
     },
     {
@@ -231,10 +227,11 @@
       "type": "regex",
       "pattern": "^(\\d\\d)\\1+$",
       "style": "same-digits",
-      "hintable": false,
       "badge": "Повторяющиеся пары цифр!",
       "effects": [
-        "sparkles"
+        "sparkles",
+        "confetti",
+        "streamers"
       ]
     },
     {
@@ -243,11 +240,11 @@
       "minLength": 3,
       "minZeros": 2,
       "style": "round",
-      "hintable": true,
       "badge": "Круглое число!",
       "effects": [
         "coins",
-        "confetti"
+        "confetti",
+        "streamers"
       ]
     }
   ],
@@ -260,7 +257,9 @@
       100
     ],
     "effects": [
-      "confetti"
+      "fireworks",
+      "confetti",
+      "streamers"
     ],
     "texts": {
       "25": "Четверть пути к цели пройдена!",

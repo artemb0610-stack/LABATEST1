@@ -109,6 +109,7 @@
       <div class="hero__pic" id="piggyPic" aria-hidden="true">🛴</div>
 
       <div class="amount-wrap" id="amountWrap">
+        <div class="party-halo" id="partyHalo" aria-hidden="true"></div>
         <button class="amount" id="amount" aria-live="polite" aria-label="Сумма в копилке"></button>
         <div class="tap-hint" id="tapHint" hidden></div>
       </div>
@@ -119,7 +120,6 @@
           <i style="left:25%"></i><i style="left:50%"></i><i style="left:75%"></i>
         </div>
       </div>
-      <div class="soft-hint" id="softHint" hidden></div>
     </article>
 
     <button class="btn btn--grad" data-go="topup"><svg class="btn__ic"><use href="#i-plus"/></svg>Пополнить копилку</button>
@@ -230,7 +230,6 @@
         </div>
       </div>
       <div class="demo__row demo__row--wrap demo__row--opts">
-        <label><input type="checkbox" id="demoHint" checked> подсказка «до красивого числа»</label>
         <label>сезон
           <select id="demoSeason">
             <option value="auto">по дате</option>

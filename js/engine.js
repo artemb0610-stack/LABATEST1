@@ -8,7 +8,7 @@
   'use strict';
 
   var KNOWN_TYPES = ['exact', 'repdigit', 'sequence', 'palindrome', 'round', 'regex'];
-  var KNOWN_EFFECTS = ['coins', 'confetti', 'sparkles', 'leaves', 'snow', 'coinDrop'];
+  var KNOWN_EFFECTS = ['coins', 'confetti', 'sparkles', 'streamers', 'fireworks', 'burst', 'leaves', 'snow', 'coinDrop'];
 
   /* ---------- проверки чисел ---------- */
 
@@ -77,18 +77,6 @@
     return null;
   }
 
-  /** Ближайшее красивое число сверху среди правил с hintable:true (для мягкой подсказки). */
-  function findNext(amount, config) {
-    if (!config || !config.enabled || !config.hint || !config.hint.enabled) return null;
-    if (Math.floor(amount) !== amount || amount < 0) return null;
-    var maxGap = config.hint.maxGap || 100;
-    for (var gap = 1; gap <= maxGap; gap++) {
-      var hit = classify(amount + gap, config);
-      if (hit && hit.rule.hintable) return { value: amount + gap, gap: gap, rule: hit.rule };
-    }
-    return null;
-  }
-
   /** Какие этапы цели (в процентах) пересечены при переходе prev → next. */
   function crossedMilestones(prev, next, goal, percents) {
     if (!goal || goal <= 0 || next <= prev) return [];
@@ -141,7 +129,6 @@
       autoMode: raw.autoMode === 'off' || raw.autoMode === 'full' ? raw.autoMode : 'hint',
       autoOnTopup: raw.autoOnTopup === 'off' || raw.autoOnTopup === 'hint' ? raw.autoOnTopup : 'full',
       tapHint: typeof raw.tapHint === 'string' ? raw.tapHint : '',
-      hint: null,
       styles: {},
       rules: [],
       milestones: null,
@@ -149,14 +136,6 @@
       seasons: [],
       warnings: warnings
     };
-
-    if (raw.hint && typeof raw.hint === 'object') {
-      cfg.hint = {
-        enabled: raw.hint.enabled !== false,
-        maxGap: clampNum(raw.hint.maxGap, 1, 1000, 100),
-        text: typeof raw.hint.text === 'string' ? raw.hint.text : 'До красивого числа осталось {gap} ₽'
-      };
-    }
 
     var styles = raw.styles && typeof raw.styles === 'object' ? raw.styles : {};
     Object.keys(styles).forEach(function (k) {
@@ -175,7 +154,6 @@
         id: String(name),
         type: r.type,
         style: r.style,
-        hintable: !!r.hintable,
         badge: typeof r.badge === 'string' ? r.badge : '',
         minLength: clampNum(r.minLength, 1, 12, 3),
         minZeros: clampNum(r.minZeros, 1, 9, 2),
@@ -242,7 +220,6 @@
     isPalindrome: isPalindrome,
     isRound: isRound,
     classify: classify,
-    findNext: findNext,
     crossedMilestones: crossedMilestones,
     activeSeason: activeSeason,
     sanitize: sanitize,

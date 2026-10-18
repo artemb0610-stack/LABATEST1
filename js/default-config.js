@@ -7,11 +7,6 @@ this.KB.DEFAULT_CONFIG = {
   "autoMode": "hint",
   "autoOnTopup": "full",
   "tapHint": "Нажми на цифры ✨",
-  "hint": {
-    "enabled": true,
-    "maxGap": 100,
-    "text": "До красивого числа {next} осталось {gap} ₽"
-  },
   "themes": [
     {
       "id": "auto",
@@ -130,9 +125,9 @@ this.KB.DEFAULT_CONFIG = {
         5000
       ],
       "style": "banknote-5000",
-      "hintable": true,
       "badge": "Как купюра в 5 000 ₽!",
       "effects": [
+        "fireworks",
         "coins",
         "confetti"
       ]
@@ -144,9 +139,9 @@ this.KB.DEFAULT_CONFIG = {
         2000
       ],
       "style": "banknote-2000",
-      "hintable": true,
       "badge": "Как купюра в 2 000 ₽!",
       "effects": [
+        "fireworks",
         "coins",
         "confetti"
       ]
@@ -158,11 +153,11 @@ this.KB.DEFAULT_CONFIG = {
         1000
       ],
       "style": "banknote-1000",
-      "hintable": true,
       "badge": "Как купюра в 1 000 ₽!",
       "effects": [
         "coins",
-        "confetti"
+        "confetti",
+        "fireworks"
       ]
     },
     {
@@ -172,11 +167,11 @@ this.KB.DEFAULT_CONFIG = {
         500
       ],
       "style": "banknote-500",
-      "hintable": true,
       "badge": "Как купюра в 500 ₽!",
       "effects": [
         "coins",
-        "sparkles"
+        "streamers",
+        "confetti"
       ]
     },
     {
@@ -186,10 +181,10 @@ this.KB.DEFAULT_CONFIG = {
         100
       ],
       "style": "banknote-100",
-      "hintable": true,
       "badge": "Как купюра в 100 ₽!",
       "effects": [
         "coins",
+        "streamers",
         "sparkles"
       ]
     },
@@ -198,10 +193,10 @@ this.KB.DEFAULT_CONFIG = {
       "type": "repdigit",
       "minLength": 3,
       "style": "same-digits",
-      "hintable": true,
       "badge": "Все цифры одинаковые!",
       "effects": [
-        "sparkles",
+        "fireworks",
+        "streamers",
         "confetti"
       ]
     },
@@ -210,11 +205,11 @@ this.KB.DEFAULT_CONFIG = {
       "type": "sequence",
       "minLength": 3,
       "style": "counting",
-      "hintable": true,
       "badge": "Цифры по порядку — как при счёте!",
       "effects": [
         "confetti",
-        "sparkles"
+        "streamers",
+        "fireworks"
       ]
     },
     {
@@ -222,10 +217,11 @@ this.KB.DEFAULT_CONFIG = {
       "type": "palindrome",
       "minLength": 3,
       "style": "mirror",
-      "hintable": false,
       "badge": "Число-зеркало: читается с двух сторон!",
       "effects": [
-        "sparkles"
+        "sparkles",
+        "streamers",
+        "confetti"
       ]
     },
     {
@@ -233,10 +229,11 @@ this.KB.DEFAULT_CONFIG = {
       "type": "regex",
       "pattern": "^(\\d\\d)\\1+$",
       "style": "same-digits",
-      "hintable": false,
       "badge": "Повторяющиеся пары цифр!",
       "effects": [
-        "sparkles"
+        "sparkles",
+        "confetti",
+        "streamers"
       ]
     },
     {
@@ -245,11 +242,11 @@ this.KB.DEFAULT_CONFIG = {
       "minLength": 3,
       "minZeros": 2,
       "style": "round",
-      "hintable": true,
       "badge": "Круглое число!",
       "effects": [
         "coins",
-        "confetti"
+        "confetti",
+        "streamers"
       ]
     }
   ],
@@ -262,7 +259,9 @@ this.KB.DEFAULT_CONFIG = {
       100
     ],
     "effects": [
-      "confetti"
+      "fireworks",
+      "confetti",
+      "streamers"
     ],
     "texts": {
       "25": "Четверть пути к цели пройдена!",

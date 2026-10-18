@@ -75,8 +75,17 @@
     ensureGuard();
   });
 
+  // Пока экраны едут (0,35 с), тапы игнорируются: второй тап двойного нажатия
+  // не должен попасть в кнопку экрана, который выезжает под пальцем.
+  var navLockUntil = 0;
+  function lockNav() { navLockUntil = Date.now() + 350; }
+  app.addEventListener('click', function (e) {
+    if (Date.now() < navLockUntil && !e.target.closest('#demo, #demoFab')) { e.stopPropagation(); e.preventDefault(); }
+  }, true);
+
   function go(name) {
     if (current() === name) return;
+    lockNav();
     var prev = screenEl(current());
     prev.classList.remove('is-active'); prev.classList.add('is-behind');
     state.stack.push(name);
@@ -90,6 +99,7 @@
 
   function back() {
     if (state.stack.length < 2) return;
+    lockNav();
     var leaving = screenEl(state.stack.pop());
     leaving.classList.remove('is-active', 'is-behind');
     var to = screenEl(current());
@@ -242,7 +252,6 @@
     var hit = E.classify(value, state.cfg);
     renderAmount(value, hit);
     renderProgress(value);
-    renderSoftHint(value);
     renderHistory();
     if (opts.auto && hit) autoShow(hit, state.cfg.autoMode);
   }
@@ -361,15 +370,6 @@
     $('piggyGoal').textContent = 'из ' + E.formatRub(goal);
   }
 
-  // Мягкая подсказка «до красивого числа». Только на экране копилки, без сроков и давления; выключается из CMS.
-  function renderSoftHint(value) {
-    var el = $('softHint');
-    var next = E.findNext(value, state.cfg);
-    if (!next || value >= P().goal) { el.hidden = true; return; }
-    el.textContent = E.fillTemplate(state.cfg.hint.text, { next: E.formatRub(next.value), gap: next.gap });
-    el.hidden = false;
-  }
-
   function renderHistory() {
     var h = P().history;
     $('history').innerHTML = h.length ? h.map(function (x) {
@@ -418,10 +418,12 @@
   function fullEffect(hit) {
     if (isForbidden()) return;
     var cfg = state.cfg, rule = hit.rule;
-    var kinds = [rule.effects[(Math.random() * rule.effects.length) | 0]];
+    // вариант из конфига + радужная волна от суммы + сезонные частицы
+    var kinds = [rule.effects[(Math.random() * rule.effects.length) | 0], 'burst'];
     var s = season();
     if (s && s.particles) kinds.push(s.particles);
     FX.play(kinds, originOfAmount(), paletteOf(styleFor(hit)), cfg.maxEffectMs);
+    party();
     FX.toast((s && s.badgePrefix ? s.badgePrefix + ' ' : '') + rule.badge);
     FX.haptic([15, 40, 25]);
     FX.chime('pretty');
@@ -430,7 +432,13 @@
     $('tapHint').hidden = true;
   }
 
-  // «Перекатывание» цифр как у счётчика. Только визуал, ввод не блокирует.
+  // Радужная вспышка за суммой. Только визуал, касания не перехватывает.
+  function party() {
+    var halo = $('partyHalo');
+    halo.classList.remove('on'); void halo.offsetWidth; halo.classList.add('on');
+  }
+
+  // «Перекатывание» цифр как у счётчика, затем каждая цифра подпрыгивает. Только визуал, ввод не блокирует.
   function rollDigits() {
     var ds = amountEl.querySelectorAll('.d');
     Array.prototype.forEach.call(ds, function (d, i) {
@@ -441,6 +449,8 @@
       setTimeout(function () {
         clearInterval(d._roll); d._roll = null;
         d.textContent = final; d.classList.remove('roll');
+        d.classList.remove('hop'); void d.offsetWidth; d.classList.add('hop');
+        setTimeout(function () { d.classList.remove('hop'); }, 750);
       }, 260 + i * 90);
     });
   }
@@ -516,18 +526,22 @@
       if (cfg.autoOnTopup === 'full') fullEffect(hit);
       else if (cfg.autoOnTopup === 'hint') autoShow(hit, 'hint');
     }
+    var hadParty = !!hit;
     if (cfg.milestones) {
       var goal = P().goal;
       var crossed = E.crossedMilestones(from, to, goal, cfg.milestones.percents);
       if (crossed.length) {
         var top = crossed[crossed.length - 1];
         var text = E.fillTemplate(cfg.milestones.texts[String(top)] || ('Пройдено ' + top + '% пути к цели!'), { goal: E.formatRub(goal) });
-        FX.play(cfg.milestones.effects.length ? cfg.milestones.effects : ['confetti'], originOfAmount(),
+        FX.play((cfg.milestones.effects.length ? cfg.milestones.effects : ['confetti']).concat(['burst']), originOfAmount(),
           ['#5ccf52', '#c4f23a', '#7fd6f7', '#ffd45c', '#9b8cf5'], cfg.maxEffectMs);
+        party();
         FX.toast(text, 2000);
         if (!hit) { FX.haptic([20, 50, 20]); FX.chime('milestone'); }
+        hadParty = true;
       }
     }
+    if (!hadParty) FX.play(['sparkles'], originOfAmount(), [], 900);
   }
 
   /* ================= встряхивание копилки ================= */
@@ -592,7 +606,6 @@
 
   function syncDemoJson() {
     $('demoJson').value = state.raw ? JSON.stringify(state.raw, null, 2) : '';
-    $('demoHint').checked = !!(state.cfg.hint && state.cfg.hint.enabled);
     showWarnings();
     renderCms();
   }
@@ -667,7 +680,7 @@
     var badge = $('cmsBadge').value.trim() || 'Особое число!';
     state.raw.rules = (state.raw.rules || []).filter(function (r) { return r.id !== 'custom-' + n; });
     state.raw.rules.unshift({ id: 'custom-' + n, type: 'exact', values: [n], style: $('cmsStyle').value,
-      hintable: true, badge: badge, effects: ['confetti', 'sparkles', 'coins'] });
+      badge: badge, effects: ['confetti', 'sparkles', 'coins'] });
     $('cmsNum').value = ''; $('cmsBadge').value = '';
     cmsApplied('✓ Число ' + E.formatRub(n) + ' добавлено без релиза');
     setTimeout(function () { setPiggy(n); }, 600); // сразу показываем, как это выглядит у ребёнка
@@ -691,12 +704,6 @@
   });
   $('demoReset').addEventListener('click', function () {
     applyConfig(JSON.parse(JSON.stringify(KB.DEFAULT_CONFIG)));
-    syncDemoJson();
-  });
-  $('demoHint').addEventListener('change', function () {
-    if (!state.raw) return;
-    state.raw.hint = Object.assign({}, state.raw.hint, { enabled: this.checked });
-    applyConfig(state.raw);
     syncDemoJson();
   });
   $('demoSeason').addEventListener('change', function () { state.seasonOverride = this.value; });

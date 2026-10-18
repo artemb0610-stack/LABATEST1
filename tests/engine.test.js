@@ -53,22 +53,6 @@ t('обычные суммы и мусор не украшаются', function 
   assert.strictEqual(E.classify('1000', cfg), null);
 });
 
-t('подсказка: ближайшее красивое число сверху', function () {
-  assert.deepStrictEqual(pick(E.findNext(995, cfg)), [999, 4]);   // 999 тоже красивое
-  assert.deepStrictEqual(pick(E.findNext(999, cfg)), [1000, 1]);
-  assert.deepStrictEqual(pick(E.findNext(4990, cfg)), [5000, 10]); // 4994 — зеркальное, но не hintable
-  assert.deepStrictEqual(pick(E.findNext(7770, cfg)), [7777, 7]);
-  assert.deepStrictEqual(pick(E.findNext(1230, cfg)), [1234, 4]);
-  // палиндромы помечены hintable:false — к ним не подталкиваем
-  assert.notStrictEqual(E.findNext(1219, cfg).value, 1221);
-  function pick(r) { return [r.value, r.gap]; }
-});
-
-t('подсказку можно выключить из конфига', function () {
-  var off = E.sanitize(Object.assign({}, raw, { hint: { enabled: false } }));
-  assert.strictEqual(E.findNext(995, off), null);
-});
-
 t('этапы цели', function () {
   assert.deepStrictEqual(E.crossedMilestones(1000, 1300, 5000, [25, 50, 75, 100]), [25]);
   assert.deepStrictEqual(E.crossedMilestones(1000, 4000, 5000, [25, 50, 75, 100]), [25, 50, 75]);
