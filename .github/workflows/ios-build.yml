@@ -74,7 +74,9 @@ jobs:
             xcrun simctl launch "$UDID" "$BID" "$@" || echo "::error::launch failed for $name"
             sleep "$wait"
             xcrun simctl io "$UDID" screenshot "shots/$name.png" >/dev/null 2>&1
-            if ! xcrun simctl spawn "$UDID" launchctl list | grep -q "$BID"; then echo "::error::app is not running after launch ($name) — crash?"; fi
+            sleep 3
+            xcrun simctl spawn "$UDID" launchctl list > /tmp/lc.txt 2>/dev/null || true
+            if grep -q "$BID" /tmp/lc.txt; then echo "alive: $name"; else echo "::error::app is not running 3s after screenshot ($name) — crash?"; fi
           }
           shot 01_home 5 -kbScreen home
           shot 02_piggies 4 -kbScreen piggies
@@ -86,6 +88,10 @@ jobs:
           shot 08_history 4 -kbScreen history -kbTheme auto
           shot 09_history_end 5 -kbScreen history -kbHistoryEnd YES
           shot 10_demo 4 -kbScreen demo
+          shot 11_history_long 12 -kbScreen history
+          mkdir -p shots/crash
+          find ~/Library/Logs/DiagnosticReports -name "*.ips" -mmin -30 2>/dev/null | while read -r f; do cp "$f" shots/crash/; done
+          ls shots/crash || true
           xcrun simctl spawn "$UDID" log show --last 3m --predicate 'process CONTAINS "AppModule" OR eventMessage CONTAINS "Fatal error"' --style compact 2>/dev/null | grep -iE "fatal|crash|exception" | head -20 || true
           ls -la shots
 
