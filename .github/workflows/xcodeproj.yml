@@ -1,0 +1,47 @@
+name: Xcode project
+
+# Генерирует ios/Kopilka.xcodeproj из ios/project.yml, проверяет сборку и коммитит проект в репозиторий.
+on:
+  push:
+    paths:
+      - "ios/project.yml"
+      - "ios/Kopilka.swiftpm/**"
+      - ".github/workflows/xcodeproj.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: xcodeproj
+  cancel-in-progress: true
+
+jobs:
+  xcodeproj:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate Kopilka.xcodeproj
+        run: |
+          brew install xcodegen
+          cd ios
+          xcodegen generate
+          ls -la Kopilka.xcodeproj
+      - name: Build generated project (iOS Simulator)
+        shell: bash
+        run: |
+          cd ios
+          set -o pipefail
+          xcodebuild -project Kopilka.xcodeproj -scheme Kopilka \
+            -destination 'generic/platform=iOS Simulator' build CODE_SIGNING_ALLOWED=NO 2>&1 | tee xcodeproj-build.log | grep -E "error:|BUILD (SUCCEEDED|FAILED)" || true
+          grep -q "BUILD SUCCEEDED" xcodeproj-build.log
+      - name: Commit project to repository
+        shell: bash
+        run: |
+          git config user.name "Artem"
+          git config user.email "artemb0610-stack@users.noreply.github.com"
+          git add ios/Kopilka.xcodeproj
+          if git diff --cached --quiet; then echo "проект не изменился"; exit 0; fi
+          git commit -m "Xcode-проект ios/Kopilka.xcodeproj (сгенерирован XcodeGen и проверен сборкой)"
+          git pull --rebase origin main
+          git push origin HEAD:main
