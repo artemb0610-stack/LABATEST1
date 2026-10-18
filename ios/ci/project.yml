@@ -1,0 +1,22 @@
+# Проект для проверочной сборки в CI (XcodeGen). Для запуска на телефоне используйте ios/Kopilka.swiftpm.
+name: KopilkaCI
+options:
+  bundleIdPrefix: ru.hackathon
+targets:
+  Kopilka:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: ../Kopilka.swiftpm
+        excludes:
+          - "Package.swift"
+          - "README.md"
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: ru.hackathon.kopilka
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Копилка
+        SWIFT_VERSION: "5.0"
+        CODE_SIGNING_ALLOWED: NO

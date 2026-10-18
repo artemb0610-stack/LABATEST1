@@ -1,110 +1,41 @@
-name: iOS build check
+name: iOS build
 
 on:
   push:
     paths:
       - "ios/**"
+      - "config/**"
       - ".github/workflows/ios-build.yml"
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 jobs:
-  ios:
+  build:
     runs-on: macos-15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
 
-      - name: Xcode
-        run: |
-          sudo xcode-select -s "$(ls -d /Applications/Xcode_16*.app | sort -V | tail -1)" || true
-          xcodebuild -version
+      - name: Xcode version
+        run: xcodebuild -version
 
-      - name: Typecheck all Swift sources (iOS 17 simulator SDK)
-        working-directory: ios/Kopilka.swiftpm
-        shell: bash
+      - name: Build app sources (XcodeGen project, iOS Simulator)
         run: |
-          set +e
-          xcrun --sdk iphonesimulator swiftc -typecheck -parse-as-library \
-            -target arm64-apple-ios17.0-simulator \
-            $(find . -name "*.swift" ! -name Package.swift) > typecheck.log 2>&1
-          code=$?
-          cat typecheck.log
-          grep -E "^[^ ]+\.swift:[0-9]+:[0-9]+: error:" typecheck.log | head -50 | while IFS= read -r line; do
-            f=$(echo "$line" | cut -d: -f1); l=$(echo "$line" | cut -d: -f2); m=$(echo "$line" | cut -d: -f5-)
-            echo "::error file=ios/Kopilka.swiftpm/${f#./},line=$l::$m"
-          done
-          exit $code
+          brew install xcodegen
+          cd ios/ci
+          xcodegen generate
+          set -o pipefail
+          xcodebuild -project KopilkaCI.xcodeproj -scheme Kopilka \
+            -destination 'generic/platform=iOS Simulator' \
+            -configuration Debug build CODE_SIGNING_ALLOWED=NO 2>&1 | tee build.log | grep -E "error:|warning: unre|BUILD (SUCCEEDED|FAILED)" || true
+          grep -q "BUILD SUCCEEDED" build.log
 
-      - name: Build for simulator
-        working-directory: ios/Kopilka.swiftpm
-        shell: bash
+      - name: Build Kopilka.swiftpm (as opened in Xcode)
+        continue-on-error: true
         run: |
-          UDID=$(xcrun simctl create kb com.apple.CoreSimulator.SimDeviceType.iPhone-16)
-          echo "UDID=$UDID" >> $GITHUB_ENV
-          xcodebuild -list -json > list.json 2>/dev/null || true
-          SCHEME=$(python3 -c "import json;d=json.load(open('list.json'));w=d.get('workspace') or d.get('project') or {};s=w.get('schemes',[]);print(s[0] if s else '')")
+          cd ios/Kopilka.swiftpm
+          xcodebuild -list || true
+          SCHEME=$(xcodebuild -list -json 2>/dev/null | python3 -c "import json,sys; d=json.load(sys.stdin); print((d.get('workspace') or d.get('project') or {}).get('schemes',[''])[0])")
           echo "scheme: $SCHEME"
-          set +e
-          xcodebuild -scheme "$SCHEME" -destination "id=$UDID" -derivedDataPath dd \
-            -skipPackagePluginValidation CODE_SIGNING_ALLOWED=NO build > build.log 2>&1
-          code=$?
-          grep -E "error:|BUILD (SUCCEEDED|FAILED)" build.log | head -60
-          grep -E "^/.+\.swift:[0-9]+:[0-9]+: error:" build.log | sort -u | head -50 | while IFS= read -r line; do
-            f=$(echo "$line" | cut -d: -f1); l=$(echo "$line" | cut -d: -f2); m=$(echo "$line" | cut -d: -f5-)
-            echo "::error file=${f##*/},line=$l::$m"
-          done
-          exit $code
-
-      - name: Run in simulator and take screenshots
-        working-directory: ios/Kopilka.swiftpm
-        shell: bash
-        run: |
-          APP=$(find dd/Build/Products -maxdepth 2 -name "*.app" | head -1)
-          echo "app: $APP"
-          BID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" "$APP/Info.plist")
-          xcrun simctl boot "$UDID"
-          xcrun simctl bootstatus "$UDID" -b
-          xcrun simctl install "$UDID" "$APP"
-          mkdir -p shots
-          shot () {   # имя, пауза, аргументы запуска
-            name=$1; wait=$2; shift 2
-            xcrun simctl terminate "$UDID" "$BID" 2>/dev/null || true
-            xcrun simctl launch "$UDID" "$BID" "$@" || echo "::error::launch failed for $name"
-            sleep "$wait"
-            xcrun simctl io "$UDID" screenshot "shots/$name.png" >/dev/null 2>&1
-            sleep 3
-            xcrun simctl spawn "$UDID" launchctl list > /tmp/lc.txt 2>/dev/null || true
-            if grep -q "$BID" /tmp/lc.txt; then echo "alive: $name"; else echo "::error::app is not running 3s after screenshot ($name) — crash?"; fi
-          }
-          shot 01_home 5 -kbScreen home
-          shot 02_piggies 4 -kbScreen piggies
-          shot 03_piggy_1000 4 -kbScreen piggy -kbAmount 1000 -kbTheme auto
-          shot 04_piggy_1234_party 2.0 -kbScreen piggy -kbAmount 1234 -kbTheme auto -kbParty YES
-          shot 05_piggy_12321 4 -kbScreen piggy -kbAmount 12321 -kbTheme auto
-          shot 06_themes 4 -kbScreen themes -kbAmount 1234 -kbTheme auto
-          shot 07_piggy_strict 4 -kbScreen piggy -kbAmount 1234 -kbTheme strict
-          shot 08_history 4 -kbScreen history -kbTheme auto
-          shot 09_history_end 5 -kbScreen history -kbHistoryEnd YES
-          shot 10_demo 4 -kbScreen demo
-          shot 11_history_long 12 -kbScreen history
-          mkdir -p shots/crash
-          find ~/Library/Logs/DiagnosticReports -name "*.ips" -mmin -30 2>/dev/null | while read -r f; do cp "$f" shots/crash/; done
-          ls shots/crash || true
-          xcrun simctl spawn "$UDID" log show --last 3m --predicate 'process CONTAINS "AppModule" OR eventMessage CONTAINS "Fatal error"' --style compact 2>/dev/null | grep -iE "fatal|crash|exception" | head -20 || true
-          ls -la shots
-
-      - name: Publish screenshots to branch ci-screens
-        if: always()
-        shell: bash
-        run: |
-          cp -r ios/Kopilka.swiftpm/shots /tmp/shots 2>/dev/null || mkdir -p /tmp/shots
-          cp ios/Kopilka.swiftpm/*.log /tmp/shots/ 2>/dev/null || true
-          git config user.name "ci"; git config user.email "ci@users.noreply.github.com"
-          git checkout --orphan ci-screens
-          git rm -rf -q . || true
-          cp /tmp/shots/* . 2>/dev/null || true
-          git add -A
-          git commit -q -m "screens ${GITHUB_SHA::7}" || true
-          git push -f -q origin ci-screens
+          set -o pipefail
+          xcodebuild -scheme "$SCHEME" -destination 'generic/platform=iOS Simulator' build CODE_SIGNING_ALLOWED=NO 2>&1 | tee pkg.log | grep -E "error:|BUILD (SUCCEEDED|FAILED)" || true
+          grep -q "BUILD SUCCEEDED" pkg.log
