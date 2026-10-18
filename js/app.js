@@ -253,6 +253,7 @@
 
   function renderHistoryScreen() {
     if (!historyData) historyData = makeHistory();
+    $('planet').classList.remove('is-in');   // при каждом входе планета снова «восходит» в конце списка
     var monthAgo = new Date(); monthAgo.setDate(monthAgo.getDate() - 30);
     var inMonth = historyData.reduce(function (a, x) { return x.date >= monthAgo ? a + x.sum : a; }, 0);
     $('histIn').innerHTML = '+' + sumHTML(inMonth);
@@ -276,7 +277,8 @@
   var planet = $('planet');
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) planet.classList.add('is-in'); });
+      // только когда история уже нарисована и открыта: иначе пустой список «показывает» планету сразу
+      es.forEach(function (e) { if (e.isIntersecting && historyData && current() === 'history') planet.classList.add('is-in'); });
     }, { root: screenEl('history'), threshold: 0.15 }).observe(planet);
   } else planet.classList.add('is-in');
   // Пасхалка: монета подпрыгивает и переворачивается

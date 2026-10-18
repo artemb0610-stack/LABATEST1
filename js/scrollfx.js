@@ -17,7 +17,7 @@
   var ctx = canvas.getContext('2d');
   var cfg = null, host = null, w = 0, h = 0, dpr = 1;
   var parts = [], bolts = [], raf = 0, last = 0;
-  var lastY = 0, lastT = 0, lastBolt = { l: 0, r: 0 };
+  var lastY = 0, lastT = 0, vSmooth = 0, lastBolt = { l: 0, r: 0 };
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function rand(a, b) { return a + Math.random() * (b - a); }
@@ -42,15 +42,18 @@
     host = screen;
     screen.insertBefore(canvas, screen.firstChild);
     size();
-    lastY = screen.scrollTop; lastT = performance.now();
+    lastY = screen.scrollTop; lastT = performance.now(); vSmooth = 0;
   }
 
   function onScroll(e) {
     if (!host || e.currentTarget !== host) return;
     var now = performance.now(), y = host.scrollTop;
-    var dt = Math.max(8, now - lastT), dy = y - lastY;
+    var gap = now - lastT, dt = Math.max(12, gap), dy = y - lastY;
     lastY = y; lastT = now;
-    var v = dy / dt;                         // px/мс; > 0 — прокрутка вниз
+    // скорость сглаживаем: браузер то склеивает, то дробит события прокрутки, и мгновенная скорость «скачет»
+    if (gap > 150) vSmooth = 0;
+    vSmooth = vSmooth * 0.55 + (dy / dt) * 0.45;
+    var v = vSmooth;                         // px/мс; > 0 — прокрутка вниз
     var sp = Math.abs(v);
     if (sp < cfg.minSpeed) return;
     var dir = v > 0 ? -1 : 1;                // вниз → следы летят вверх
