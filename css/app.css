@@ -245,6 +245,18 @@ span.nav__btn { background: none; }
 @keyframes fadeIn { from { opacity: 0; } }
 @keyframes sheetUp { from { transform: translateY(100%); } }
 
+/* ===== История операций ===== */
+.hsum { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding: 18px 22px; }
+.hsum .muted { font-size: 13px; margin-bottom: 2px; }
+.hsum > div:last-child { text-align: right; }
+.sum.plus { color: var(--green-ink); }
+.hday { font: 700 15px var(--font-display); color: #6b7380; margin: 20px 6px 10px; }
+.hday:first-child { margin-top: 6px; }
+.list__ic--blue { background: #dcefff; color: #4fa3f5; }
+.list__ic--mint { background: #d9f7ee; color: #3fcf9a; }
+.list__ic--violet2 { background: #ece5ff; color: #9b7cf2; }
+.list__ic--letter { font: 800 18px var(--font-display); }
+
 /* ===== Пополнение / оплата ===== */
 .form { padding: 22px; }
 .from { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; font-size: 15px; }

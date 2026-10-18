@@ -70,7 +70,7 @@
 
     <h2 class="h2">История</h2>
     <ul class="card list" id="homeHistory"></ul>
-    <button class="btn btn--white" data-go="pay">Посмотреть историю</button>
+    <button class="btn btn--white" data-go="history">Посмотреть историю</button>
   </section>
 
   <!-- ========== КОПИЛКИ (вкладка) ========== -->
@@ -152,6 +152,20 @@
       <div class="error" id="topupError" hidden></div>
     </article>
     <button class="btn btn--grad" id="topupGo">Отложить в копилку</button>
+  </section>
+
+  <!-- ========== ИСТОРИЯ ОПЕРАЦИЙ — данные о переводах, прикол не показываем ========== -->
+  <section class="screen" data-screen="history" data-overlay="forbidden" aria-label="История">
+    <header class="nav">
+      <button class="nav__btn" data-back aria-label="Назад"><svg><use href="#i-back"/></svg></button>
+      <div class="nav__title">История</div>
+      <span class="nav__btn"></span>
+    </header>
+    <article class="card hsum">
+      <div><div class="muted">Пришло за месяц</div><div class="sum sum--md plus" id="histIn"></div></div>
+      <div><div class="muted">Переводов</div><div class="sum sum--md" id="histCount"></div></div>
+    </article>
+    <div id="histList"></div>
   </section>
 
   <!-- ========== ОПЛАТА — критичный экран, прикол запрещён ========== -->

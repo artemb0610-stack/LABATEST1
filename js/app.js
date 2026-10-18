@@ -132,6 +132,7 @@
     if (name === 'topup') enterTopup();
     if (name === 'home') renderHome();
     if (name === 'piggies') renderPiggies();
+    if (name === 'history') renderHistoryScreen();
   }
 
   app.addEventListener('click', function (e) {
@@ -202,6 +203,70 @@
         '<span class="list__txt"><div class="list__title">' + h.title + '</div><div class="list__sub">' + h.sub + '</div></span>' +
         '<span class="list__sum' + (h.sum > 0 ? ' plus' : '') + '">' + (h.sum > 0 ? '+' : '') + sumHTML(h.sum) + '</span></li>';
     }).join('');
+  }
+
+  /* ================= экран «История»: ~100 входящих переводов ================= */
+  // Демо-данные генерируются на устройстве с фиксированным зерном — список одинаковый при каждом открытии.
+  var historyData = null;
+  function makeHistory() {
+    var seed = 20261018;
+    function rnd() { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+    function pick(a) { return a[Math.floor(rnd() * a.length)]; }
+    var who = [
+      { name: 'Мама', sub: 'Перевод', tone: 'peach', sums: [100, 150, 200, 250, 300, 500] },
+      { name: 'Папа', sub: 'Перевод', tone: 'blue', sums: [100, 200, 300, 500, 1000] },
+      { name: 'Бабушка Валя', sub: 'Перевод', tone: 'violet2', sums: [200, 300, 500, 1000] },
+      { name: 'Дедушка Коля', sub: 'Перевод', tone: 'mint', sums: [100, 300, 500, 700] },
+      { name: 'Тётя Оля', sub: 'Перевод', tone: 'peach', sums: [150, 250, 400] },
+      { name: 'Брат Саша', sub: 'Перевод', tone: 'blue', sums: [50, 70, 100, 120] },
+      { name: 'Мама', sub: 'Карманные на неделю', tone: 'peach', sums: [300, 350, 400] },
+      { name: 'Папа', sub: 'За пятёрку', tone: 'blue', sums: [50, 100] },
+      { name: 'Бабушка Валя', sub: 'На мороженое', tone: 'violet2', sums: [80, 100, 150] },
+      { name: 'Крёстная', sub: 'Перевод', tone: 'mint', sums: [500, 1000] }
+    ];
+    var items = [], day = new Date(); day.setHours(12, 0, 0, 0);
+    while (items.length < 100) {
+      var n = rnd() < 0.35 ? 0 : 1 + Math.floor(rnd() * 3);       // в какие-то дни переводов нет
+      for (var i = 0; i < n && items.length < 100; i++) {
+        var w = pick(who), hh = 8 + Math.floor(rnd() * 13), mm = Math.floor(rnd() * 60);
+        items.push({ date: new Date(day), time: (hh < 10 ? '0' : '') + hh + ':' + (mm < 10 ? '0' : '') + mm,
+          name: w.name, sub: w.sub, tone: w.tone, sum: pick(w.sums) });
+      }
+      day.setDate(day.getDate() - 1);
+    }
+    // внутри дня — от позднего к раннему
+    items.sort(function (a, b) { return b.date - a.date || (a.time < b.time ? 1 : -1); });
+    return items;
+  }
+
+  var MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+  function dayTitle(d) {
+    var today = new Date(); today.setHours(12, 0, 0, 0);
+    var diff = Math.round((today - d) / 86400000);
+    if (diff === 0) return 'Сегодня';
+    if (diff === 1) return 'Вчера';
+    return d.getDate() + ' ' + MONTHS[d.getMonth()] + (d.getFullYear() !== today.getFullYear() ? ' ' + d.getFullYear() : '');
+  }
+
+  function renderHistoryScreen() {
+    if (!historyData) historyData = makeHistory();
+    var monthAgo = new Date(); monthAgo.setDate(monthAgo.getDate() - 30);
+    var inMonth = historyData.reduce(function (a, x) { return x.date >= monthAgo ? a + x.sum : a; }, 0);
+    $('histIn').innerHTML = '+' + sumHTML(inMonth);
+    $('histCount').textContent = historyData.length;
+    var html = '', curDay = '';
+    historyData.forEach(function (x) {
+      var t = dayTitle(x.date);
+      if (t !== curDay) {
+        if (curDay) html += '</ul>';
+        html += '<div class="hday">' + t + '</div><ul class="card list">';
+        curDay = t;
+      }
+      html += '<li><span class="list__ic list__ic--letter list__ic--' + x.tone + '">' + x.name.charAt(0) + '</span>' +
+        '<span class="list__txt"><div class="list__title">' + x.name + '</div><div class="list__sub">' + x.sub + ' · ' + x.time + '</div></span>' +
+        '<span class="list__sum plus">+' + sumHTML(x.sum) + '</span></li>';
+    });
+    $('histList').innerHTML = html + (curDay ? '</ul>' : '');
   }
 
   /* ================= вкладка «Копилки» ================= */
