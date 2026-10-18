@@ -1,0 +1,168 @@
+{
+  "" : {
+    "diagnostics" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Копилка-master.dia",
+    "emit-module-dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Копилка-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Копилка-master-emit-module.dia",
+    "swift-dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Копилка-master.swiftdeps"
+  },
+  "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/App/AppStore.swift" : {
+    "const-values" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/AppStore.swiftconstvalues",
+    "dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/AppStore.d",
+    "diagnostics" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/AppStore.dia",
+    "index-unit-output-path" : "/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/AppStore.o",
+    "llvm-bc" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/AppStore.bc",
+    "object" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/AppStore.o",
+    "swift-dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/AppStore.swiftdeps",
+    "swiftmodule" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/AppStore~partial.swiftmodule"
+  },
+  "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/App/KopilkaApp.swift" : {
+    "const-values" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/KopilkaApp.swiftconstvalues",
+    "dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/KopilkaApp.d",
+    "diagnostics" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/KopilkaApp.dia",
+    "index-unit-output-path" : "/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/KopilkaApp.o",
+    "llvm-bc" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/KopilkaApp.bc",
+    "object" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/KopilkaApp.o",
+    "swift-dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/KopilkaApp.swiftdeps",
+    "swiftmodule" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/KopilkaApp~partial.swiftmodule"
+  },
+  "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/DesignSystem/Tokens.swift" : {
+    "const-values" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Tokens.swiftconstvalues",
+    "dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Tokens.d",
+    "diagnostics" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Tokens.dia",
+    "index-unit-output-path" : "/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Tokens.o",
+    "llvm-bc" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Tokens.bc",
+    "object" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Tokens.o",
+    "swift-dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Tokens.swiftdeps",
+    "swiftmodule" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Tokens~partial.swiftmodule"
+  },
+  "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/Effects/FX.swift" : {
+    "const-values" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/FX.swiftconstvalues",
+    "dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/FX.d",
+    "diagnostics" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/FX.dia",
+    "index-unit-output-path" : "/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/FX.o",
+    "llvm-bc" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/FX.bc",
+    "object" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/FX.o",
+    "swift-dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/FX.swiftdeps",
+    "swiftmodule" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/FX~partial.swiftmodule"
+  },
+  "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/Engine/Config.swift" : {
+    "const-values" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Config.swiftconstvalues",
+    "dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Config.d",
+    "diagnostics" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Config.dia",
+    "index-unit-output-path" : "/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Config.o",
+    "llvm-bc" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Config.bc",
+    "object" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Config.o",
+    "swift-dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Config.swiftdeps",
+    "swiftmodule" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/Config~partial.swiftmodule"
+  },
+  "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/Engine/ConfigStore.swift" : {
+    "const-values" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/ConfigStore.swiftconstvalues",
+    "dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/ConfigStore.d",
+    "diagnostics" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/ConfigStore.dia",
+    "index-unit-output-path" : "/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/ConfigStore.o",
+    "llvm-bc" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/ConfigStore.bc",
+    "object" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/ConfigStore.o",
+    "swift-dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/ConfigStore.swiftdeps",
+    "swiftmodule" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/ConfigStore~partial.swiftmodule"
+  },
+  "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/Engine/EmbeddedConfig.swift" : {
+    "const-values" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/EmbeddedConfig.swiftconstvalues",
+    "dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/EmbeddedConfig.d",
+    "diagnostics" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/EmbeddedConfig.dia",
+    "index-unit-output-path" : "/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/EmbeddedConfig.o",
+    "llvm-bc" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/EmbeddedConfig.bc",
+    "object" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/EmbeddedConfig.o",
+    "swift-dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/EmbeddedConfig.swiftdeps",
+    "swiftmodule" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/EmbeddedConfig~partial.swiftmodule"
+  },
+  "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/Engine/PrettyEngine.swift" : {
+    "const-values" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PrettyEngine.swiftconstvalues",
+    "dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PrettyEngine.d",
+    "diagnostics" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PrettyEngine.dia",
+    "index-unit-output-path" : "/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PrettyEngine.o",
+    "llvm-bc" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PrettyEngine.bc",
+    "object" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PrettyEngine.o",
+    "swift-dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PrettyEngine.swiftdeps",
+    "swiftmodule" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PrettyEngine~partial.swiftmodule"
+  },
+  "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/PrettyNumberKit/AmountDigits.swift" : {
+    "const-values" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/AmountDigits.swiftconstvalues",
+    "dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/AmountDigits.d",
+    "diagnostics" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/AmountDigits.dia",
+    "index-unit-output-path" : "/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/AmountDigits.o",
+    "llvm-bc" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/AmountDigits.bc",
+    "object" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/AmountDigits.o",
+    "swift-dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/AmountDigits.swiftdeps",
+    "swiftmodule" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/AmountDigits~partial.swiftmodule"
+  },
+  "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/PrettyNumberKit/PrettyNumberKit.swift" : {
+    "const-values" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PrettyNumberKit.swiftconstvalues",
+    "dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PrettyNumberKit.d",
+    "diagnostics" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PrettyNumberKit.dia",
+    "index-unit-output-path" : "/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PrettyNumberKit.o",
+    "llvm-bc" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PrettyNumberKit.bc",
+    "object" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PrettyNumberKit.o",
+    "swift-dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PrettyNumberKit.swiftdeps",
+    "swiftmodule" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PrettyNumberKit~partial.swiftmodule"
+  },
+  "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/Screens/DemoPanel.swift" : {
+    "const-values" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/DemoPanel.swiftconstvalues",
+    "dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/DemoPanel.d",
+    "diagnostics" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/DemoPanel.dia",
+    "index-unit-output-path" : "/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/DemoPanel.o",
+    "llvm-bc" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/DemoPanel.bc",
+    "object" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/DemoPanel.o",
+    "swift-dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/DemoPanel.swiftdeps",
+    "swiftmodule" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/DemoPanel~partial.swiftmodule"
+  },
+  "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/Screens/HistoryView.swift" : {
+    "const-values" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/HistoryView.swiftconstvalues",
+    "dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/HistoryView.d",
+    "diagnostics" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/HistoryView.dia",
+    "index-unit-output-path" : "/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/HistoryView.o",
+    "llvm-bc" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/HistoryView.bc",
+    "object" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/HistoryView.o",
+    "swift-dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/HistoryView.swiftdeps",
+    "swiftmodule" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/HistoryView~partial.swiftmodule"
+  },
+  "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/Screens/HomeView.swift" : {
+    "const-values" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/HomeView.swiftconstvalues",
+    "dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/HomeView.d",
+    "diagnostics" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/HomeView.dia",
+    "index-unit-output-path" : "/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/HomeView.o",
+    "llvm-bc" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/HomeView.bc",
+    "object" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/HomeView.o",
+    "swift-dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/HomeView.swiftdeps",
+    "swiftmodule" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/HomeView~partial.swiftmodule"
+  },
+  "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/Screens/PiggiesView.swift" : {
+    "const-values" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PiggiesView.swiftconstvalues",
+    "dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PiggiesView.d",
+    "diagnostics" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PiggiesView.dia",
+    "index-unit-output-path" : "/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PiggiesView.o",
+    "llvm-bc" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PiggiesView.bc",
+    "object" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PiggiesView.o",
+    "swift-dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PiggiesView.swiftdeps",
+    "swiftmodule" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PiggiesView~partial.swiftmodule"
+  },
+  "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/Screens/PiggyView.swift" : {
+    "const-values" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PiggyView.swiftconstvalues",
+    "dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PiggyView.d",
+    "diagnostics" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PiggyView.dia",
+    "index-unit-output-path" : "/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PiggyView.o",
+    "llvm-bc" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PiggyView.bc",
+    "object" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PiggyView.o",
+    "swift-dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PiggyView.swiftdeps",
+    "swiftmodule" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/PiggyView~partial.swiftmodule"
+  },
+  "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/Screens/ThemePicker.swift" : {
+    "const-values" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/ThemePicker.swiftconstvalues",
+    "dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/ThemePicker.d",
+    "diagnostics" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/ThemePicker.dia",
+    "index-unit-output-path" : "/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/ThemePicker.o",
+    "llvm-bc" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/ThemePicker.bc",
+    "object" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/ThemePicker.o",
+    "swift-dependencies" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/ThemePicker.swiftdeps",
+    "swiftmodule" : "/Users/runner/work/LABATEST1/LABATEST1/ios/Kopilka.swiftpm/dd/Build/Intermediates.noindex/Kopilka.build/Debug-iphonesimulator/Копилка.build/Objects-normal/arm64/ThemePicker~partial.swiftmodule"
+  }
+}

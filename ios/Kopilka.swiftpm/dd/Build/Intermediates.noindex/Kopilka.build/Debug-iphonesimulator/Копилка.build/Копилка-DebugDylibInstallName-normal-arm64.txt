@@ -1,0 +1,1 @@
+@rpath/Копилка.debug.dylib
