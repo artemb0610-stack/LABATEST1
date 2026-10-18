@@ -62,8 +62,6 @@ struct RootView: View {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
 
-            // Слой эффектов: поверх всего, касания пропускает
-            FXOverlay(fx: store.fx)
 
             // Демо-панель для жюри (в приложение не входит)
             HStack {
@@ -79,6 +77,7 @@ struct RootView: View {
                 .padding(.bottom, atRoot ? 96 : 12)
             }
         }
+        .effectsOverlay(store.fx)   // слой праздничных эффектов: поверх всего, касания пропускает
         .animation(.easeInOut(duration: 0.25), value: atRoot)
         .sheet(isPresented: $showDemo) { DemoPanel().environmentObject(store) }
         .onAppear { applyLaunchArguments() }

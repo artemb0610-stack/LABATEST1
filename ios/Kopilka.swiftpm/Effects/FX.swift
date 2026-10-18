@@ -265,6 +265,19 @@ struct FXOverlay: View {
     }
 }
 
+/// Слой праздничных эффектов как модификатор: вешается на корень приложения (или на любой экран).
+struct EffectsOverlay: ViewModifier {
+    @ObservedObject var fx: FX
+    func body(content: Content) -> some View {
+        content.overlay(alignment: .top) { FXOverlay(fx: fx).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top) }
+    }
+}
+
+extension View {
+    /// Конфетти, салют, монеты, радужная волна и плашки поверх содержимого. Касания проходят насквозь.
+    func effectsOverlay(_ fx: FX) -> some View { modifier(EffectsOverlay(fx: fx)) }
+}
+
 /// Плашка с радужной рамкой.
 struct ToastView: View {
     let text: String

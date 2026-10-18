@@ -22,6 +22,17 @@
 | `DesignSystem/` | Токены, снятые с макетов СберKids |
 | `Resources/effects.json` | Встроенная копия конфига (работает без сети) |
 
+## Всё — модификаторами
+
+| Что | Модификатор |
+| --- | --- |
+| Оформление суммы целиком по стилю из CMS | `.prettyNumber(spec)` |
+| Оформление одной цифры | `.prettyDigit(spec, ctx)` или напрямую `BanknoteDigit`, `CubeDigit`, `MirrorDigit`, `PulseZeroDigit` |
+| Контейнер суммы | `GuillocheContainer`, `ShimmerContainer`, `MirrorContainer`, `StrictContainer`, `TintContainer` |
+| Токены дизайн-системы (шрифты, цвета, радиус) | `.prettyNumberTokens(tokens)` |
+| Эффект скорости при сильной прокрутке | `.scrollSpeedEffect(config.scrollFx)` на любой `ScrollView` |
+| Слой праздничных эффектов и плашек | `.effectsOverlay(fx)` на корень приложения |
+
 ## Встраивание в дизайн-систему
 
 ```swift

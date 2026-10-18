@@ -62,7 +62,6 @@ enum HistoryData {
 
 struct HistoryView: View {
     @EnvironmentObject var store: AppStore
-    @StateObject private var speed = ScrollSpeedFX()
     @State private var planetIn = false
     @State private var coinFlip = false
     @State private var found = false
@@ -81,17 +80,10 @@ struct HistoryView: View {
     var body: some View {
         ZStack {
             DS.bg.ignoresSafeArea()
-            // Эффект скорости рисуется ПОД карточками: виден только в промежутках и по краям
-            if store.cfg.enabled && store.cfg.scrollFx.enabled {
-                ScrollSpeedCanvas(fx: speed).ignoresSafeArea()
-            }
             ScrollViewReader { proxy in
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
-                    GeometryReader { g in
-                        Color.clear.preference(key: ScrollOffsetKey.self, value: g.frame(in: .named("hist")).minY)
-                    }
-                    .frame(height: 0)
+                    Color.clear.frame(height: 0).scrollSpeedProbe()   // нужен только для iOS 17
 
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
@@ -133,8 +125,8 @@ struct HistoryView: View {
                 }
                 .padding(.horizontal, 16)
             }
-            .coordinateSpace(name: "hist")
-            .modifier(ScrollOffsetReader(speed: speed, cfg: store.cfg.scrollFx))
+            // Эффект скорости — одним модификатором: холст ПОД карточками + считывание скорости прокрутки
+            .scrollSpeedEffect(store.cfg.scrollFx, enabled: store.cfg.enabled && store.cfg.scrollFx.enabled)
             .onAppear {
                 if UserDefaults.standard.bool(forKey: "kbHistoryEnd") {   // только для CI-скриншотов
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { withAnimation { proxy.scrollTo("planet", anchor: .bottom) } }
@@ -148,7 +140,6 @@ struct HistoryView: View {
         }
         .navigationTitle("История")
         .navigationBarTitleDisplayMode(.inline)
-        .onDisappear { speed.stop() }
     }
 
     private var monthSum: Int {
@@ -161,6 +152,54 @@ struct HistoryView: View {
         store.fx.haptic(.coin); store.fx.chime()
         if !found { found = true; store.fx.showToast("Пасхалка найдена! Ты долистал до самого начала", seconds: 2.2) }
     }
+}
+
+// MARK: - Модификаторы эффекта скорости
+//
+//  ScrollView { ... }
+//      .scrollSpeedEffect(config.scrollFx)        // холст под карточками + считывание скорости
+//
+//  На iOS 17 дополнительно нужна «метка» в начале содержимого: Color.clear.frame(height: 0).scrollSpeedProbe()
+//  (на iOS 18+ скорость берётся из onScrollGeometryChange, метка ничего не делает).
+
+/// Эффект скорости для любого ScrollView. Всё состояние — внутри модификатора.
+struct ScrollSpeedEffect: ViewModifier {
+    var config: ScrollFxConfig
+    var enabled: Bool = true
+    @StateObject private var fx = ScrollSpeedFX()
+
+    @ViewBuilder func body(content: Content) -> some View {
+        if enabled {
+            content
+                .coordinateSpace(name: ScrollSpeedProbe.space)
+                .modifier(ScrollOffsetReader(speed: fx, cfg: config))
+                .background { ScrollSpeedCanvas(fx: fx).ignoresSafeArea() }   // ПОД содержимым: карточки всегда поверх
+                .onDisappear { fx.stop() }
+        } else {
+            content
+        }
+    }
+}
+
+/// Метка положения содержимого для iOS 17 (ставится на первый элемент внутри ScrollView).
+struct ScrollSpeedProbe: ViewModifier {
+    static let space = "scrollSpeedEffect"
+    func body(content: Content) -> some View {
+        content.background {
+            GeometryReader { g in
+                Color.clear.preference(key: ScrollOffsetKey.self, value: g.frame(in: .named(Self.space)).minY)
+            }
+        }
+    }
+}
+
+extension View {
+    /// Следы «гиперпрыжка» и молнии при сильной прокрутке. Параметры — из конфига (CMS).
+    func scrollSpeedEffect(_ config: ScrollFxConfig, enabled: Bool = true) -> some View {
+        modifier(ScrollSpeedEffect(config: config, enabled: enabled))
+    }
+    /// Метка для iOS 17 — см. ScrollSpeedEffect.
+    func scrollSpeedProbe() -> some View { modifier(ScrollSpeedProbe()) }
 }
 
 /// Смещение прокрутки. iOS 18+: системный onScrollGeometryChange — точное значение на каждом кадре.
