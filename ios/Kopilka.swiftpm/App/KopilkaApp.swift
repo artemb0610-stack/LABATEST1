@@ -63,6 +63,25 @@ struct RootView: View {
         }
         .animation(.easeInOut(duration: 0.25), value: atRoot)
         .sheet(isPresented: $showDemo) { DemoPanel().environmentObject(store) }
+        .onAppear { applyLaunchArguments() }
+    }
+}
+
+extension RootView {
+    /// Аргументы запуска для автоматических скриншотов в CI (на обычный запуск не влияют):
+    /// -kbScreen home|piggies|piggy|themes|history|demo  -kbAmount 1234  -kbTheme cubes  -kbParty YES  -kbHistoryEnd YES
+    func applyLaunchArguments() {
+        let d = UserDefaults.standard
+        guard let screen = d.string(forKey: "kbScreen") else { return }
+        if let t = d.string(forKey: "kbTheme") { store.theme = t }
+        if let a = d.string(forKey: "kbAmount"), let v = Int(a), let i = store.index("scooter") { store.piggies[i].amount = v }
+        switch screen {
+        case "piggies": store.tab = .piggies
+        case "piggy", "themes": store.tab = .piggies; store.piggiesPath = [.piggy("scooter")]
+        case "history": store.tab = .home; store.homePath = [.history]
+        case "demo": showDemo = true
+        default: break
+        }
     }
 }
 

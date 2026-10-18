@@ -50,6 +50,9 @@ struct PiggyView: View {
         .sheet(isPresented: $showThemes) { ThemePicker(value: p.amount).environmentObject(store).presentationDetents([.large]) }
         .onAppear {
             soundOn = store.fx.soundOn
+            let d = UserDefaults.standard   // только для CI-скриншотов
+            if d.string(forKey: "kbScreen") == "themes" { DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { showThemes = true } }
+            if d.bool(forKey: "kbParty") { DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) { tapAmount() } }
             if let t = store.pendingTopup, t.id == id {
                 store.pendingTopup = nil
                 animateTopup(from: t.from, to: t.to)

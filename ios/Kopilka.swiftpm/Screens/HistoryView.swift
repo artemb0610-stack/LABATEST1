@@ -85,6 +85,7 @@ struct HistoryView: View {
             if store.cfg.enabled && store.cfg.scrollFx.enabled {
                 ScrollSpeedCanvas(fx: speed).ignoresSafeArea()
             }
+            ScrollViewReader { proxy in
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     GeometryReader { g in
@@ -126,12 +127,19 @@ struct HistoryView: View {
                             .padding(.horizontal, -16)
                             .onAppear { withAnimation(.spring(response: 0.9, dampingFraction: 0.8)) { planetIn = true } }
                             .onDisappear { planetIn = false }
+                            .id("planet")
                     }
                 }
                 .padding(.horizontal, 16)
             }
             .coordinateSpace(name: "hist")
             .onPreferenceChange(ScrollOffsetKey.self) { y in speed.feed(offset: y, cfg: store.cfg.scrollFx) }
+            .onAppear {
+                if UserDefaults.standard.bool(forKey: "kbHistoryEnd") {   // только для CI-скриншотов
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { withAnimation { proxy.scrollTo("planet", anchor: .bottom) } }
+                }
+            }
+            }
         }
         .navigationTitle("История")
         .navigationBarTitleDisplayMode(.inline)

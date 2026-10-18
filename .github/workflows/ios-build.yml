@@ -7,6 +7,9 @@ on:
       - ".github/workflows/ios-build.yml"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   ios:
     runs-on: macos-15
@@ -28,24 +31,23 @@ jobs:
             $(find . -name "*.swift" ! -name Package.swift) > typecheck.log 2>&1
           code=$?
           cat typecheck.log
-          # ошибки компилятора → аннотации на странице запуска
           grep -E "^[^ ]+\.swift:[0-9]+:[0-9]+: error:" typecheck.log | head -50 | while IFS= read -r line; do
             f=$(echo "$line" | cut -d: -f1); l=$(echo "$line" | cut -d: -f2); m=$(echo "$line" | cut -d: -f5-)
             echo "::error file=ios/Kopilka.swiftpm/${f#./},line=$l::$m"
           done
           exit $code
 
-      - name: Build the app package with xcodebuild
-        if: always()
+      - name: Build for simulator
         working-directory: ios/Kopilka.swiftpm
         shell: bash
         run: |
+          UDID=$(xcrun simctl create kb com.apple.CoreSimulator.SimDeviceType.iPhone-16)
+          echo "UDID=$UDID" >> $GITHUB_ENV
           xcodebuild -list -json > list.json 2>/dev/null || true
-          cat list.json || true
-          SCHEME=$(python3 -c "import json;d=json.load(open('list.json'));w=d.get('workspace') or d.get('project') or {};s=w.get('schemes',[]);print(s[0] if s else '')" 2>/dev/null)
+          SCHEME=$(python3 -c "import json;d=json.load(open('list.json'));w=d.get('workspace') or d.get('project') or {};s=w.get('schemes',[]);print(s[0] if s else '')")
           echo "scheme: $SCHEME"
           set +e
-          xcodebuild -scheme "$SCHEME" -destination "generic/platform=iOS Simulator" \
+          xcodebuild -scheme "$SCHEME" -destination "id=$UDID" -derivedDataPath dd \
             -skipPackagePluginValidation CODE_SIGNING_ALLOWED=NO build > build.log 2>&1
           code=$?
           grep -E "error:|BUILD (SUCCEEDED|FAILED)" build.log | head -60
@@ -55,11 +57,48 @@ jobs:
           done
           exit $code
 
-      - name: Upload logs
+      - name: Run in simulator and take screenshots
+        working-directory: ios/Kopilka.swiftpm
+        shell: bash
+        run: |
+          APP=$(find dd/Build/Products -maxdepth 2 -name "*.app" | head -1)
+          echo "app: $APP"
+          BID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" "$APP/Info.plist")
+          xcrun simctl boot "$UDID"
+          xcrun simctl bootstatus "$UDID" -b
+          xcrun simctl install "$UDID" "$APP"
+          mkdir -p shots
+          shot () {   # имя, пауза, аргументы запуска
+            name=$1; wait=$2; shift 2
+            xcrun simctl terminate "$UDID" "$BID" 2>/dev/null || true
+            xcrun simctl launch "$UDID" "$BID" "$@" || echo "::error::launch failed for $name"
+            sleep "$wait"
+            xcrun simctl io "$UDID" screenshot "shots/$name.png" >/dev/null 2>&1
+            if ! xcrun simctl spawn "$UDID" launchctl list | grep -q "$BID"; then echo "::error::app is not running after launch ($name) — crash?"; fi
+          }
+          shot 01_home 5 -kbScreen home
+          shot 02_piggies 4 -kbScreen piggies
+          shot 03_piggy_1000 4 -kbScreen piggy -kbAmount 1000 -kbTheme auto
+          shot 04_piggy_1234_party 2.0 -kbScreen piggy -kbAmount 1234 -kbTheme auto -kbParty YES
+          shot 05_piggy_12321 4 -kbScreen piggy -kbAmount 12321 -kbTheme auto
+          shot 06_themes 4 -kbScreen themes -kbAmount 1234 -kbTheme auto
+          shot 07_piggy_strict 4 -kbScreen piggy -kbAmount 1234 -kbTheme strict
+          shot 08_history 4 -kbScreen history -kbTheme auto
+          shot 09_history_end 5 -kbScreen history -kbHistoryEnd YES
+          shot 10_demo 4 -kbScreen demo
+          xcrun simctl spawn "$UDID" log show --last 3m --predicate 'process CONTAINS "AppModule" OR eventMessage CONTAINS "Fatal error"' --style compact 2>/dev/null | grep -iE "fatal|crash|exception" | head -20 || true
+          ls -la shots
+
+      - name: Publish screenshots to branch ci-screens
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-logs
-          path: |
-            ios/Kopilka.swiftpm/typecheck.log
-            ios/Kopilka.swiftpm/build.log
+        shell: bash
+        run: |
+          cp -r ios/Kopilka.swiftpm/shots /tmp/shots 2>/dev/null || mkdir -p /tmp/shots
+          cp ios/Kopilka.swiftpm/*.log /tmp/shots/ 2>/dev/null || true
+          git config user.name "ci"; git config user.email "ci@users.noreply.github.com"
+          git checkout --orphan ci-screens
+          git rm -rf -q . || true
+          cp /tmp/shots/* . 2>/dev/null || true
+          git add -A
+          git commit -q -m "screens ${GITHUB_SHA::7}" || true
+          git push -f -q origin ci-screens
