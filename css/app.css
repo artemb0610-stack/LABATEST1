@@ -273,13 +273,15 @@ span.nav__btn { background: none; }
 .planet__cap { color: #aab1bb; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
 .planet__svg { display: block; width: 100%; height: auto; overflow: visible; }
 .planet__svg * { fill: none; stroke: #b9c0c9; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.planet__body { fill: #eaedf1 !important; stroke: #c3c9d1 !important; stroke-width: 2.5 !important; }
-.planet__line { stroke-dasharray: 3 7; stroke: #cfd4db !important; }
-.planet__crater { stroke: #c9ced6 !important; }
+.planet__body { fill: #e4f3ea !important; stroke: #a9d4b8 !important; stroke-width: 2.5 !important; }
+.planet__line { stroke-dasharray: 3 7; stroke: #bfe0ca !important; }
+.planet__crater { stroke: #a9d4b8 !important; fill: #d8eedf !important; }
 .planet__stars * { stroke-width: 1.6; }
 .planet__stars circle { fill: #c9ced6 !important; stroke: none !important; }
-.planet__shadow { stroke: none !important; fill: #d9dde3 !important; }
-.planet__coin-face circle { fill: #f2f4f7 !important; }
+.planet__shadow { stroke: none !important; fill: #cde6d5 !important; }
+.planet__coin-face circle { fill: #fdf6e3 !important; stroke: #d8b45c !important; }
+.planet__coin-face path { stroke: #c9a24a !important; }
+.planet__cloth { fill: #e4f3ea !important; stroke: #9ccdae !important; }
 .planet__coin-rim { stroke-dasharray: 2 3; stroke-width: 1.4 !important; }
 .planet__coin { cursor: pointer; pointer-events: all; }
 .planet__coin-face, .planet__cloth { transform-box: fill-box; }
