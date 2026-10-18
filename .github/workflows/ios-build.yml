@@ -22,11 +22,10 @@ jobs:
         working-directory: ios/Kopilka.swiftpm
         shell: bash
         run: |
-          printf 'import Foundation\nextension Bundle { static var module: Bundle { .main } }\n' > /tmp/BundleStub.swift
           set +e
           xcrun --sdk iphonesimulator swiftc -typecheck -parse-as-library \
             -target arm64-apple-ios17.0-simulator \
-            $(find . -name "*.swift" ! -name Package.swift) /tmp/BundleStub.swift > typecheck.log 2>&1
+            $(find . -name "*.swift" ! -name Package.swift) > typecheck.log 2>&1
           code=$?
           cat typecheck.log
           # ошибки компилятора → аннотации на странице запуска

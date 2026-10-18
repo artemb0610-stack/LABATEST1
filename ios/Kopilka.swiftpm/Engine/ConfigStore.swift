@@ -28,10 +28,17 @@ enum ConfigStore {
         return bundled()
     }
 
+    /// Встроенный конфиг: файл в ресурсах приложения, а если его не нашли — копия, вшитая в код.
     static func bundled() -> RawConfig? {
-        guard let url = Bundle.module.url(forResource: "effects", withExtension: "json"),
-              let d = try? Data(contentsOf: url) else { return nil }
-        return decode(d)
+        var bundles = [Bundle.main] + Bundle.allBundles
+        for u in Bundle.main.urls(forResourcesWithExtension: "bundle", subdirectory: nil) ?? [] {
+            if let b = Bundle(url: u) { bundles.append(b) }
+        }
+        for b in bundles {
+            if let url = b.url(forResource: "effects", withExtension: "json"),
+               let d = try? Data(contentsOf: url), let r = decode(d) { return r }
+        }
+        return decode(Data(EmbeddedConfig.json.utf8))
     }
 
     /// Свежий конфиг из сети с таймаутом 4 с. Ошибка сети или битый файл → nil (остаёмся на текущем).
